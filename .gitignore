@@ -1,0 +1,24 @@
+# Protótipo do TCC e notas de trabalho: ficam fora deste repositório público
+dlis-proto/
+RETOMAR-AMANHA.md
+
+# Binários compilados
+*.exe
+*.o
+*.obj
+*.out
+
+# Intermediário do gerador de PDF (o relatorio.pdf, sim, é versionado)
+relatorio.html
+
+# Python
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+
+# Sistema
+Thumbs.db
+desktop.ini
+.DS_Store
