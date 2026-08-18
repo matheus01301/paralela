@@ -25,10 +25,10 @@ from pygments.lexers import CLexer, get_lexer_by_name
 # IDENTIFICACAO -- preencher
 # --------------------------------------------------------------------------
 IDENT = {
-    "instituicao": "PREENCHER: instituicao",
-    "disciplina": "PREENCHER: Programacao Paralela",
-    "professor": "PREENCHER: professor(a)",
-    "aluno": "PREENCHER: nome do aluno",
+    "instituicao": "",
+    "disciplina": "Programação Paralela",
+    "professor": "",
+    "aluno": "Matheus Marinho",
     "tarefa": "Tarefa 1",
     "data": "18 de agosto de 2026",
 }
@@ -84,8 +84,8 @@ CSS = (
 
 body {
   font-family: "Georgia", "Cambria", serif;
-  font-size: 9.8pt;
-  line-height: 1.42;
+  font-size: 9.3pt;
+  line-height: 1.35;
   color: #1a1a1a;
   margin: 0;
   hyphens: auto;
@@ -126,14 +126,14 @@ body {
 h1, h2, h3 { font-weight: 700; page-break-after: avoid; break-after: avoid; }
 h2 {
   font-size: 12.5pt;
-  margin: 5mm 0 2mm 0;
+  margin: 4mm 0 1.5mm 0;
   padding-bottom: 1.2mm;
   border-bottom: 1.5px solid #d8d8d8;
 }
 h3 { font-size: 10.5pt; margin: 3.5mm 0 1.5mm 0; color: #333; }
 h2 + h3 { margin-top: 3mm; }
 
-p { margin: 0 0 2.2mm 0; text-align: justify; }
+p { margin: 0 0 1.8mm 0; text-align: justify; }
 
 strong { color: #000; }
 em { color: #333; }
@@ -250,12 +250,18 @@ blockquote p { margin: 0; text-align: left; }
 # --------------------------------------------------------------------------
 def cabecalho_html(titulo_h1: str) -> str:
     i = IDENT
+    curso = " &nbsp;·&nbsp; ".join(
+        valor for valor in (i["instituicao"], i["disciplina"]) if valor
+    )
+    autoria = " &nbsp;·&nbsp; ".join(
+        valor for valor in (i["aluno"], i["professor"]) if valor
+    )
     return f"""
 <div class="cabecalho">
-  <div class="linha"><span>{i["instituicao"]} &nbsp;·&nbsp; {i["disciplina"]}</span>
+  <div class="linha"><span>{curso}</span>
                      <span class="tarefa">{i["tarefa"]}</span></div>
   <h1>{titulo_h1}</h1>
-  <div class="linha"><span>{i["aluno"]} &nbsp;·&nbsp; {i["professor"]}</span>
+  <div class="linha"><span>{autoria}</span>
                      <span>{i["data"]}</span></div>
 </div>
 """
