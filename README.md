@@ -10,9 +10,8 @@ plataformas, também em **TypeScript** sobre Node.
 | [`tarefa-1/`](tarefa-1/) | Aproximação de π por séries: acurácia × iterações, tempo de execução e o limite de precisão do `double` |
 | [`tarefa-2/`](tarefa-2/) | Multiplicação matriz-vetor: acesso por linhas × por colunas, e o efeito do padrão de acesso à memória |
 
-Cada tarefa tem seu próprio `README.md` com os resultados medidos. A tarefa 1 tem
-ainda o relatório em PDF, com o código-fonte realçado, em
-[`tarefa-1/relatorio/`](tarefa-1/relatorio/).
+Cada tarefa tem seu próprio `README.md`, um relatório em PDF com o código-fonte
+realçado e um `guia_apresentacao.md` com perguntas para a explicação presencial.
 
 ## Protocolo de medição
 
@@ -52,12 +51,15 @@ gcc -O2 -Wall -Wextra -std=c99 mxv.c -o mxv.exe -lm
 
 Todos os fontes em C compilam sem emitir nenhum aviso com `-Wall -Wextra`.
 
-## Relatório em PDF
+## Relatórios em PDF
 
-O relatório da tarefa 1 é gerado a partir do Markdown, com realce de sintaxe do
-código, sem depender de pandoc nem de LaTeX:
+Os relatórios são gerados a partir do Markdown, com realce de sintaxe do código,
+sem depender de pandoc nem de LaTeX:
 
 ```bash
 cd tarefa-1/relatorio
 python build_pdf.py       # markdown-it-py + Pygments + Chrome headless
+
+cd ../../tarefa-2/relatorio
+python build_pdf.py
 ```
