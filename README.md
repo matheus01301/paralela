@@ -9,6 +9,7 @@ plataformas, também em **TypeScript** sobre Node.
 |---|---|
 | [`tarefa-1/`](tarefa-1/) | Aproximação de π por séries: acurácia × iterações, tempo de execução e o limite de precisão do `double` |
 | [`tarefa-2/`](tarefa-2/) | Multiplicação matriz-vetor: acesso por linhas × por colunas, e o efeito do padrão de acesso à memória |
+| [`tarefa-3/`](tarefa-3/) | Paralelismo ao nível de instrução: dependências, múltiplos acumuladores e otimizações do compilador |
 
 Cada tarefa tem seu próprio `README.md`, um relatório em PDF com o código-fonte
 realçado e um `guia_apresentacao.md` com perguntas para a explicação presencial.
@@ -23,7 +24,8 @@ Fixo para todos os programas, para que os números sejam comparáveis entre si:
   O tempo de CPU aparece em coluna separada.
 - **Mediana de várias execuções**, nunca média.
 - **Aquecimento de JIT obrigatório** nas versões TypeScript.
-- **`-O2` sempre declarado.** Com `-O0` os números não são comparáveis.
+- **Nível de otimização sempre declarado.** Nas tarefas 1 e 2 foi usado `-O2`; a
+  tarefa 3 compara explicitamente `-O0`, `-O2` e `-O3`.
 
 ## Ambiente das medições
 
@@ -47,6 +49,10 @@ node --experimental-strip-types pi_serie.ts 9
 # Tarefa 2 — multiplicação matriz-vetor
 cd ../tarefa-2
 gcc -O2 -Wall -Wextra -std=c99 mxv.c -o mxv.exe -lm
+
+# Tarefa 3 — ILP e níveis de otimização
+cd ../tarefa-3
+./executar_testes.ps1
 ```
 
 Todos os fontes em C compilam sem emitir nenhum aviso com `-Wall -Wextra`.
@@ -61,5 +67,8 @@ cd tarefa-1/relatorio
 python build_pdf.py       # markdown-it-py + Pygments + Chrome headless
 
 cd ../../tarefa-2/relatorio
+python build_pdf.py
+
+cd ../../tarefa-3/relatorio
 python build_pdf.py
 ```
