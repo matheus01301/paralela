@@ -1,0 +1,57 @@
+﻿Tarefa 5 - contagem de primos
+Limite: 10000000 | Threads: 20 | Execucoes: 5
+
+--- Execucao 1 ---
+Contagem de primos entre 2 e 10000000
+Threads na versao paralela: 20
+
+Versao       Primos       Tempo (s)
+Sequencial   664579       2.294497
+Paralela     31001        0.325218
+
+Speedup: 7.055x
+Diferenca no resultado: 633578
+
+--- Execucao 2 ---
+Contagem de primos entre 2 e 10000000
+Threads na versao paralela: 20
+
+Versao       Primos       Tempo (s)
+Sequencial   664579       2.300537
+Paralela     31001        0.306187
+
+Speedup: 7.513x
+Diferenca no resultado: 633578
+
+--- Execucao 3 ---
+Contagem de primos entre 2 e 10000000
+Threads na versao paralela: 20
+
+Versao       Primos       Tempo (s)
+Sequencial   664579       2.259462
+Paralela     31001        0.302109
+
+Speedup: 7.479x
+Diferenca no resultado: 633578
+
+--- Execucao 4 ---
+Contagem de primos entre 2 e 10000000
+Threads na versao paralela: 20
+
+Versao       Primos       Tempo (s)
+Sequencial   664579       2.264279
+Paralela     31001        0.302008
+
+Speedup: 7.497x
+Diferenca no resultado: 633578
+
+--- Execucao 5 ---
+Contagem de primos entre 2 e 10000000
+Threads na versao paralela: 20
+
+Versao       Primos       Tempo (s)
+Sequencial   664579       2.259386
+Paralela     31089        0.314836
+
+Speedup: 7.176x
+Diferenca no resultado: 633490
