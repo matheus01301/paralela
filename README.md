@@ -10,6 +10,7 @@ plataformas, também em **TypeScript** sobre Node.
 | [`tarefa-1/`](tarefa-1/) | Aproximação de π por séries: acurácia × iterações, tempo de execução e o limite de precisão do `double` |
 | [`tarefa-2/`](tarefa-2/) | Multiplicação matriz-vetor: acesso por linhas × por colunas, e o efeito do padrão de acesso à memória |
 | [`tarefa-3/`](tarefa-3/) | Paralelismo ao nível de instrução: dependências, múltiplos acumuladores e otimizações do compilador |
+| [`tarefa-4/`](tarefa-4/) | OpenMP e Roofline Model: programas limitados pela memória e pela CPU |
 
 Cada tarefa tem seu próprio `README.md`, um relatório em PDF com o código-fonte
 realçado e um `guia_apresentacao.md` com perguntas para a explicação presencial.
@@ -24,8 +25,8 @@ Fixo para todos os programas, para que os números sejam comparáveis entre si:
   O tempo de CPU aparece em coluna separada.
 - **Mediana de várias execuções**, nunca média.
 - **Aquecimento de JIT obrigatório** nas versões TypeScript.
-- **Nível de otimização sempre declarado.** Nas tarefas 1 e 2 foi usado `-O2`; a
-  tarefa 3 compara explicitamente `-O0`, `-O2` e `-O3`.
+- **Nível de otimização sempre declarado.** Nas tarefas 1, 2 e 4 foi usado `-O2`;
+  a tarefa 3 compara explicitamente `-O0`, `-O2` e `-O3`.
 
 ## Ambiente das medições
 
@@ -53,6 +54,11 @@ gcc -O2 -Wall -Wextra -std=c99 mxv.c -o mxv.exe -lm
 # Tarefa 3 — ILP e níveis de otimização
 cd ../tarefa-3
 ./executar_testes.ps1
+
+# Tarefa 4 — benchmarks memory-bound e compute-bound com OpenMP
+cd ../tarefa-4
+gcc -O2 -Wall -Wextra -std=c99 -fopenmp memory_bound.c -o memory_bound.exe
+gcc -O2 -Wall -Wextra -std=c99 -fopenmp cpu_bound.c -o cpu_bound.exe -lm
 ```
 
 Todos os fontes em C compilam sem emitir nenhum aviso com `-Wall -Wextra`.
@@ -70,5 +76,8 @@ cd ../../tarefa-2/relatorio
 python build_pdf.py
 
 cd ../../tarefa-3/relatorio
+python build_pdf.py
+
+cd ../../tarefa-4/relatorio
 python build_pdf.py
 ```

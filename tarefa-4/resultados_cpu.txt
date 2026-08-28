@@ -1,0 +1,16 @@
+Benchmark compute-bound: recorrencias aritmeticas independentes
+Elementos: 1000000 | iteracoes internas: 200 | dados: 15.3 MiB
+Resultado consolidado: mediana de 3 execucoes completas, cada uma com 5 amostras
+Intensidade aritmetica: 200.0 FLOP/byte util
+
+threads,tempo_s,speedup,eficiencia_pct,Giteracoes_s,GFLOP_s
+1,0.533217100,1.000,100.0,0.38,6.00
+2,0.274339300,1.944,97.2,0.73,11.66
+4,0.141456200,3.769,94.2,1.41,22.62
+6,0.099725000,5.347,89.1,2.01,32.09
+8,0.085462700,6.239,78.0,2.34,37.44
+10,0.072272500,7.378,73.8,2.77,44.28
+12,0.062852200,8.484,70.7,3.18,50.91
+14,0.055673900,9.578,68.4,3.59,57.48
+16,0.049860600,10.694,66.8,4.01,64.18
+20,0.042107800,12.663,63.3,4.75,76.00
