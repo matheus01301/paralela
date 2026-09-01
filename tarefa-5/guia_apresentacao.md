@@ -15,6 +15,42 @@ relatório entregue em PDF.
 8. Os problemas podem não aparecer claramente em toda medição; isso não torna o
    programa correto nem perfeitamente balanceado.
 
+## Como explicar o código
+
+Siga esta ordem durante a apresentação:
+
+1. **Função `eh_primo`:** verifica se um número é primo. Ela descarta valores
+   menores que 2, trata o número 2 separadamente, elimina os outros pares e testa
+   apenas divisores ímpares até a raiz quadrada.
+2. **Função `contar_sequencial`:** percorre os números de 2 até `n` e incrementa
+   `quantidade` sempre que encontra um primo.
+3. **Função `contar_paralelo`:** executa o mesmo laço, acrescentando
+   `#pragma omp parallel for` para dividir as iterações entre as threads.
+4. **Problema principal:** o teste de cada número é independente, mas todas as
+   threads modificam o mesmo contador com `quantidade++`. Isso pode causar perda
+   de incrementos.
+5. **Função `main`:** define o limite e a quantidade de threads, executa as duas
+   versões, mede os tempos e apresenta os resultados.
+
+### Fala curta sobre o código
+
+> O programa possui uma função que verifica se um número é primo. Depois, ele
+> percorre todos os números primeiro sequencialmente e depois em paralelo. A
+> principal mudança na segunda versão é o `parallel for`. O teste de cada número
+> pode ser dividido entre as threads, mas o contador é compartilhado, criando o
+> problema observado.
+
+### Partes auxiliares
+
+- `walltime()` serve apenas para medir o tempo de execução;
+- `ler_inteiro_positivo()` valida os argumentos informados pelo usuário;
+- `omp_set_num_threads()` define quantas threads serão usadas;
+- `numero / divisor` permite limitar os testes à raiz quadrada sem calcular a
+  raiz e sem fazer uma multiplicação que possa ultrapassar o limite de `int`.
+
+Não é necessário explicar cada `include`, toda a validação dos argumentos ou os
+detalhes internos do relógio, a menos que o professor pergunte.
+
 ## Perguntas e respostas
 
 ### Como um número é classificado como primo?

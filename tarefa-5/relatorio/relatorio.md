@@ -1,5 +1,26 @@
 # Contagem sequencial e paralela de números primos
 
+## Resumo para a defesa
+
+- **Objetivo:** contar os números primos entre 2 e `n` e comparar as execuções
+  sequencial e paralela.
+- **O que foi paralelizado:** o laço principal recebeu a diretiva
+  `#pragma omp parallel for`.
+- **O que pode ser executado independentemente:** o teste de primalidade de cada
+  número.
+- **Problema de correção:** todas as threads atualizam o mesmo contador
+  `quantidade`, podendo perder incrementos.
+- **Problema de distribuição:** testar alguns números custa mais do que testar
+  outros, portanto algumas threads podem terminar antes das demais.
+- **Resultado principal:** a versão sequencial encontrou 664.579 primos; a
+  paralela encontrou cerca de 31 mil, mostrando que ficou mais rápida, mas
+  incorreta.
+- **Conclusão:** adicionar uma diretiva de paralelização não garante, por si só,
+  um programa correto nem uma divisão equilibrada do trabalho.
+
+**Frase-chave:** o teste de cada número é independente, mas o contador usado
+para juntar os resultados é compartilhado.
+
 ## 1. Objetivo
 
 O objetivo desta tarefa foi implementar em C um programa que conta quantos
@@ -99,6 +120,14 @@ resultado útil depois que a equivalência das saídas for validada.
 
 ## 5. Desafio de correção
 
+Pontos principais:
+
+- `quantidade` é compartilhada entre as threads;
+- `quantidade++` envolve leitura, soma e escrita;
+- duas threads podem ler o mesmo valor e gravar o mesmo resultado;
+- quando isso acontece, um dos incrementos é perdido;
+- por isso, o resultado paralelo pode estar errado e variar entre execuções.
+
 A expressão `quantidade++` parece uma única operação no código-fonte, mas envolve
 ler o valor atual, somar um e gravar o novo valor. Duas threads podem ler o mesmo
 valor antes que qualquer uma grave sua atualização. As duas então gravam o mesmo
@@ -113,24 +142,29 @@ Por isso, obter resultados iguais em uma execução não provaria que o programa
 correto. Da mesma forma, o fato de o problema aparecer claramente nesta máquina
 não garante que ele apareça com a mesma intensidade em outro ambiente.
 
-Uma forma apropriada de corrigir o contador seria usar:
+### 5.1 Bônus: uma possível correção com `reduction`
+
+Como conhecimento adicional, uma forma apropriada de corrigir o contador seria
+usar:
 
 ```c
 #pragma omp parallel for reduction(+:quantidade)
 ```
 
 Com `reduction`, cada thread acumularia uma quantidade privada e o OpenMP somaria
-os valores ao final. Essa solução é apresentada somente como reflexão: ela não
-foi aplicada à versão medida, pois o objetivo deste experimento foi observar o
-que acontece ao acrescentar a diretiva sem alterar a lógica original.
+os valores ao final. Esse recurso não foi aplicado à versão medida: ele é
+apresentado apenas como uma extensão e uma possível solução para o problema
+observado.
 
 ## 6. Desafio de distribuição de carga
 
-As iterações do laço não possuem custo uniforme. Há três casos principais:
+Pontos principais:
 
 - um número par é descartado quase imediatamente;
 - um número composto ímpar termina quando seu primeiro divisor é encontrado;
 - um número primo testa todos os divisores ímpares até sua raiz quadrada.
+- algumas threads podem terminar cedo e ficar ociosas;
+- o tempo total depende da última thread que terminar seu trabalho.
 
 Além disso, a raiz quadrada cresce com o valor do candidato. Assim, as faixas
 próximas de `n` tendem a permitir mais testes que as faixas iniciais. Dependendo de
@@ -139,12 +173,16 @@ ociosas enquanto outras continuam processando iterações mais caras. Como o la�
 só termina quando a última thread conclui seu trabalho, esse desequilíbrio limita
 o ganho de desempenho.
 
-Um escalonamento dinâmico poderia redistribuir pequenos blocos às threads livres,
-por exemplo com `schedule(dynamic)`. Isso também introduziria overhead e não foi
-implementado, pois a tarefa solicita a observação e a explicação do problema, não
-sua solução. É possível que o desequilíbrio não apareça de maneira evidente nos
-tempos de uma execução; sua ausência visível não significa que todas as iterações
-tenham o mesmo custo.
+É possível que o desequilíbrio não apareça de maneira evidente nos tempos de
+uma execução. Sua ausência visível não significa que todas as iterações tenham o
+mesmo custo.
+
+### 6.1 Bônus: uma possível melhoria com `schedule(dynamic)`
+
+Como conhecimento adicional, `schedule(dynamic)` poderia entregar novos blocos
+de iterações às threads que terminassem primeiro. Isso pode melhorar o equilíbrio,
+mas também introduz um custo de gerenciamento. O recurso não foi usado no
+experimento; ele é apresentado somente como uma possível melhoria.
 
 ## 7. Conclusão
 
