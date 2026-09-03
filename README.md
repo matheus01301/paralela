@@ -12,6 +12,7 @@ plataformas, também em **TypeScript** sobre Node.
 | [`tarefa-3/`](tarefa-3/) | Paralelismo ao nível de instrução: dependências, múltiplos acumuladores e otimizações do compilador |
 | [`tarefa-4/`](tarefa-4/) | OpenMP e Roofline Model: programas limitados pela memória e pela CPU |
 | [`tarefa-5/`](tarefa-5/) | Contagem de primos com OpenMP: correção e distribuição de carga |
+| [`tarefa-6/`](tarefa-6/) | Estimativa estocástica de π: condição de corrida, `critical` e escopo de dados no OpenMP |
 
 Cada tarefa tem seu próprio `README.md`, um relatório em PDF com o código-fonte
 realçado e um `guia_apresentacao.md` com perguntas para a explicação presencial.
@@ -64,6 +65,10 @@ gcc -O2 -Wall -Wextra -std=c99 -fopenmp cpu_bound.c -o cpu_bound.exe -lm
 # Tarefa 5 — contagem sequencial e paralela de números primos
 cd ../tarefa-5
 gcc -O2 -Wall -Wextra -std=c99 -fopenmp primos.c -o primos.exe
+
+# Tarefa 6 — estimativa estocástica de π e cláusulas OpenMP
+cd ../tarefa-6
+gcc -O2 -Wall -Wextra -std=c99 -fopenmp pi_monte_carlo.c -o pi_monte_carlo.exe
 ```
 
 Todos os fontes em C compilam sem emitir nenhum aviso com `-Wall -Wextra`.
@@ -87,5 +92,8 @@ cd ../../tarefa-4/relatorio
 python build_pdf.py
 
 cd ../../tarefa-5/relatorio
+python build_pdf.py
+
+cd ../../tarefa-6/relatorio
 python build_pdf.py
 ```

@@ -1,0 +1,71 @@
+﻿Tarefa 6 - estimativa estocastica de pi
+Amostras: 10000000 | Threads: 20 | Execucoes: 5 | Semente: 2026
+
+--- Execucao 1 ---
+Estimativa estocastica de pi
+Amostras: 10000000 | Threads: 20 | Semente: 2026
+
+Versao                         Dentro          pi    Tempo (s)    Diferenca
+Sequencial                     7854484   3.141793600     0.024000   +0
+parallel for (corrida)          656116   0.262446400     0.048000   -7198368
+critical por ponto             7854484   3.141793600     0.741000   +0
+private + critical             7854484   3.141793600     0.004000   +0
+
+Ultimo ponto via lastprivate: (0.208288741, -0.438420464)
+Ultimo ponto de referencia:   (0.208288741, -0.438420464)
+Semente original: 2026
+--- Execucao 2 ---
+Estimativa estocastica de pi
+Amostras: 10000000 | Threads: 20 | Semente: 2026
+
+Versao                         Dentro          pi    Tempo (s)    Diferenca
+Sequencial                     7854484   3.141793600     0.027000   +0
+parallel for (corrida)          724553   0.289821200     0.051000   -7129931
+critical por ponto             7854484   3.141793600     0.750000   +0
+private + critical             7854484   3.141793600     0.004000   +0
+
+Ultimo ponto via lastprivate: (0.208288741, -0.438420464)
+Ultimo ponto de referencia:   (0.208288741, -0.438420464)
+Semente original: 2026
+--- Execucao 3 ---
+Estimativa estocastica de pi
+Amostras: 10000000 | Threads: 20 | Semente: 2026
+
+Versao                         Dentro          pi    Tempo (s)    Diferenca
+Sequencial                     7854484   3.141793600     0.026000   +0
+parallel for (corrida)          594279   0.237711600     0.049000   -7260205
+critical por ponto             7854484   3.141793600     0.751000   +0
+private + critical             7854484   3.141793600     0.003000   +0
+
+Ultimo ponto via lastprivate: (0.208288741, -0.438420464)
+Ultimo ponto de referencia:   (0.208288741, -0.438420464)
+Semente original: 2026
+
+--- Execucao 4 ---
+Estimativa estocastica de pi
+Amostras: 10000000 | Threads: 20 | Semente: 2026
+
+Versao                         Dentro          pi    Tempo (s)    Diferenca
+Sequencial                     7854484   3.141793600     0.026000   +0
+parallel for (corrida)          717355   0.286942000     0.046000   -7137129
+critical por ponto             7854484   3.141793600     0.743000   +0
+private + critical             7854484   3.141793600     0.004000   +0
+
+Ultimo ponto via lastprivate: (0.208288741, -0.438420464)
+Ultimo ponto de referencia:   (0.208288741, -0.438420464)
+Semente original: 2026
+
+--- Execucao 5 ---
+Estimativa estocastica de pi
+Amostras: 10000000 | Threads: 20 | Semente: 2026
+
+Versao                         Dentro          pi    Tempo (s)    Diferenca
+Sequencial                     7854484   3.141793600     0.027000   +0
+parallel for (corrida)         1048344   0.419337600     0.051000   -6806140
+critical por ponto             7854484   3.141793600     0.775000   +0
+private + critical             7854484   3.141793600     0.003000   +0
+
+Ultimo ponto via lastprivate: (0.208288741, -0.438420464)
+Ultimo ponto de referencia:   (0.208288741, -0.438420464)
+Semente original: 2026
+
