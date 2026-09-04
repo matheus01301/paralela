@@ -1,0 +1,164 @@
+﻿Tarefa 7 - tarefas OpenMP em uma lista encadeada
+Threads: 4 | Execucoes: 3
+
+--- Execucao 1 ---
+Lista com 6 nos; equipe solicitada com 4 threads.
+
+=== 1. SEM single: erro proposital ===
+[sem single] relatorio.pdf        | thread executora 0 | ocorrencia 1
+[sem single] dados.csv            | thread executora 0 | ocorrencia 1
+[sem single] relatorio.pdf        | thread executora 0 | ocorrencia 2
+[sem single] imagem.png           | thread executora 0 | ocorrencia 1
+[sem single] dados.csv            | thread executora 0 | ocorrencia 2
+[sem single] notas.txt            | thread executora 0 | ocorrencia 1
+[sem single] imagem.png           | thread executora 0 | ocorrencia 2
+[sem single] notas.txt            | thread executora 0 | ocorrencia 2
+[sem single] apresentacao.pptx    | thread executora 0 | ocorrencia 1
+[sem single] relatorio.pdf        | thread executora 0 | ocorrencia 3
+[sem single] programa.c           | thread executora 1 | ocorrencia 1
+[sem single] programa.c           | thread executora 2 | ocorrencia 2
+[sem single] apresentacao.pptx    | thread executora 1 | ocorrencia 2
+[sem single] dados.csv            | thread executora 1 | ocorrencia 3
+[sem single] imagem.png           | thread executora 1 | ocorrencia 3
+[sem single] relatorio.pdf        | thread executora 1 | ocorrencia 4
+[sem single] dados.csv            | thread executora 1 | ocorrencia 4
+[sem single] imagem.png           | thread executora 1 | ocorrencia 4
+[sem single] notas.txt            | thread executora 1 | ocorrencia 3
+[sem single] notas.txt            | thread executora 1 | ocorrencia 4
+[sem single] programa.c           | thread executora 1 | ocorrencia 3
+[sem single] programa.c           | thread executora 1 | ocorrencia 4
+[sem single] apresentacao.pptx    | thread executora 1 | ocorrencia 3
+[sem single] apresentacao.pptx    | thread executora 1 | ocorrencia 4
+Resumo da rodada:
+  relatorio.pdf        -> 4 processamento(s)
+  dados.csv            -> 4 processamento(s)
+  imagem.png           -> 4 processamento(s)
+  notas.txt            -> 4 processamento(s)
+  programa.c           -> 4 processamento(s)
+  apresentacao.pptx    -> 4 processamento(s)
+
+=== 2. COM single: versao correta ===
+[com single] relatorio.pdf        | thread executora 2 | ocorrencia 1
+[com single] dados.csv            | thread executora 2 | ocorrencia 1
+[com single] imagem.png           | thread executora 2 | ocorrencia 1
+[com single] notas.txt            | thread executora 2 | ocorrencia 1
+[com single] programa.c           | thread executora 2 | ocorrencia 1
+[com single] apresentacao.pptx    | thread executora 1 | ocorrencia 1
+Resumo da rodada:
+  relatorio.pdf        -> 1 processamento(s)
+  dados.csv            -> 1 processamento(s)
+  imagem.png           -> 1 processamento(s)
+  notas.txt            -> 1 processamento(s)
+  programa.c           -> 1 processamento(s)
+  apresentacao.pptx    -> 1 processamento(s)
+
+Diagnostico: sem single, 6 de 6 nos nao foram processados uma vez.
+Diagnostico: com single, 0 de 6 nos nao foram processados uma vez.
+--- Execucao 2 ---
+Lista com 6 nos; equipe solicitada com 4 threads.
+
+=== 1. SEM single: erro proposital ===
+[sem single] relatorio.pdf        | thread executora 3 | ocorrencia 1
+[sem single] imagem.png           | thread executora 3 | ocorrencia 1
+[sem single] dados.csv            | thread executora 2 | ocorrencia 1
+[sem single] imagem.png           | thread executora 2 | ocorrencia 2
+[sem single] notas.txt            | thread executora 2 | ocorrencia 2
+[sem single] programa.c           | thread executora 2 | ocorrencia 1
+[sem single] apresentacao.pptx    | thread executora 2 | ocorrencia 1
+[sem single] relatorio.pdf        | thread executora 2 | ocorrencia 3
+[sem single] relatorio.pdf        | thread executora 2 | ocorrencia 4
+[sem single] dados.csv            | thread executora 1 | ocorrencia 2
+[sem single] apresentacao.pptx    | thread executora 1 | ocorrencia 2
+[sem single] dados.csv            | thread executora 1 | ocorrencia 3
+[sem single] imagem.png           | thread executora 1 | ocorrencia 3
+[sem single] notas.txt            | thread executora 1 | ocorrencia 3
+[sem single] programa.c           | thread executora 1 | ocorrencia 3
+[sem single] apresentacao.pptx    | thread executora 1 | ocorrencia 3
+[sem single] dados.csv            | thread executora 1 | ocorrencia 4
+[sem single] relatorio.pdf        | thread executora 0 | ocorrencia 2
+[sem single] notas.txt            | thread executora 0 | ocorrencia 4
+[sem single] programa.c           | thread executora 0 | ocorrencia 4
+[sem single] apresentacao.pptx    | thread executora 0 | ocorrencia 4
+[sem single] programa.c           | thread executora 2 | ocorrencia 2
+[sem single] notas.txt            | thread executora 3 | ocorrencia 1
+[sem single] imagem.png           | thread executora 1 | ocorrencia 4
+Resumo da rodada:
+  relatorio.pdf        -> 4 processamento(s)
+  dados.csv            -> 4 processamento(s)
+  imagem.png           -> 4 processamento(s)
+  notas.txt            -> 4 processamento(s)
+  programa.c           -> 4 processamento(s)
+  apresentacao.pptx    -> 4 processamento(s)
+
+=== 2. COM single: versao correta ===
+[com single] relatorio.pdf        | thread executora 2 | ocorrencia 1
+[com single] apresentacao.pptx    | thread executora 3 | ocorrencia 1
+[com single] dados.csv            | thread executora 2 | ocorrencia 1
+[com single] programa.c           | thread executora 3 | ocorrencia 1
+[com single] imagem.png           | thread executora 2 | ocorrencia 1
+[com single] notas.txt            | thread executora 3 | ocorrencia 1
+Resumo da rodada:
+  relatorio.pdf        -> 1 processamento(s)
+  dados.csv            -> 1 processamento(s)
+  imagem.png           -> 1 processamento(s)
+  notas.txt            -> 1 processamento(s)
+  programa.c           -> 1 processamento(s)
+  apresentacao.pptx    -> 1 processamento(s)
+
+Diagnostico: sem single, 6 de 6 nos nao foram processados uma vez.
+Diagnostico: com single, 0 de 6 nos nao foram processados uma vez.
+
+--- Execucao 3 ---
+Lista com 6 nos; equipe solicitada com 4 threads.
+
+=== 1. SEM single: erro proposital ===
+[sem single] relatorio.pdf        | thread executora 1 | ocorrencia 1
+[sem single] dados.csv            | thread executora 0 | ocorrencia 1
+[sem single] imagem.png           | thread executora 3 | ocorrencia 1
+[sem single] relatorio.pdf        | thread executora 2 | ocorrencia 2
+[sem single] relatorio.pdf        | thread executora 1 | ocorrencia 3
+[sem single] imagem.png           | thread executora 2 | ocorrencia 2
+[sem single] notas.txt            | thread executora 2 | ocorrencia 1
+[sem single] dados.csv            | thread executora 1 | ocorrencia 3
+[sem single] programa.c           | thread executora 1 | ocorrencia 1
+[sem single] relatorio.pdf        | thread executora 3 | ocorrencia 4
+[sem single] dados.csv            | thread executora 2 | ocorrencia 4
+[sem single] imagem.png           | thread executora 3 | ocorrencia 3
+[sem single] notas.txt            | thread executora 3 | ocorrencia 2
+[sem single] apresentacao.pptx    | thread executora 3 | ocorrencia 2
+[sem single] notas.txt            | thread executora 3 | ocorrencia 3
+[sem single] programa.c           | thread executora 3 | ocorrencia 3
+[sem single] dados.csv            | thread executora 0 | ocorrencia 2
+[sem single] apresentacao.pptx    | thread executora 3 | ocorrencia 3
+[sem single] imagem.png           | thread executora 0 | ocorrencia 4
+[sem single] notas.txt            | thread executora 0 | ocorrencia 4
+[sem single] programa.c           | thread executora 0 | ocorrencia 4
+[sem single] apresentacao.pptx    | thread executora 3 | ocorrencia 4
+[sem single] programa.c           | thread executora 2 | ocorrencia 2
+[sem single] apresentacao.pptx    | thread executora 1 | ocorrencia 1
+Resumo da rodada:
+  relatorio.pdf        -> 4 processamento(s)
+  dados.csv            -> 4 processamento(s)
+  imagem.png           -> 4 processamento(s)
+  notas.txt            -> 4 processamento(s)
+  programa.c           -> 4 processamento(s)
+  apresentacao.pptx    -> 4 processamento(s)
+
+=== 2. COM single: versao correta ===
+[com single] apresentacao.pptx    | thread executora 1 | ocorrencia 1
+[com single] relatorio.pdf        | thread executora 2 | ocorrencia 1
+[com single] dados.csv            | thread executora 3 | ocorrencia 1
+[com single] imagem.png           | thread executora 3 | ocorrencia 1
+[com single] notas.txt            | thread executora 3 | ocorrencia 1
+[com single] programa.c           | thread executora 1 | ocorrencia 1
+Resumo da rodada:
+  relatorio.pdf        -> 1 processamento(s)
+  dados.csv            -> 1 processamento(s)
+  imagem.png           -> 1 processamento(s)
+  notas.txt            -> 1 processamento(s)
+  programa.c           -> 1 processamento(s)
+  apresentacao.pptx    -> 1 processamento(s)
+
+Diagnostico: sem single, 6 de 6 nos nao foram processados uma vez.
+Diagnostico: com single, 0 de 6 nos nao foram processados uma vez.
+
