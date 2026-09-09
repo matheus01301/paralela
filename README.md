@@ -14,6 +14,7 @@ plataformas, também em **TypeScript** sobre Node.
 | [`tarefa-5/`](tarefa-5/) | Contagem de primos com OpenMP: correção e distribuição de carga |
 | [`tarefa-6/`](tarefa-6/) | Estimativa estocástica de π: condição de corrida, `critical` e escopo de dados no OpenMP |
 | [`tarefa-7/`](tarefa-7/) | Lista encadeada com tarefas OpenMP: `task`, `single`, captura de dados e sincronização |
+| [`tarefa-8/`](tarefa-8/) | Monte Carlo com `rand`/`rand_r`: coerência de cache e falso compartilhamento |
 
 Cada tarefa tem seu próprio `README.md`, um relatório em PDF com o código-fonte
 realçado e um `guia_apresentacao.md` com perguntas para a explicação presencial.
@@ -74,6 +75,10 @@ gcc -O2 -Wall -Wextra -std=c99 -fopenmp pi_monte_carlo.c -o pi_monte_carlo.exe
 # Tarefa 7 — lista encadeada e tarefas OpenMP
 cd ../tarefa-7
 gcc -O2 -Wall -Wextra -std=c99 -fopenmp lista_tarefas.c -o lista_tarefas.exe
+
+# Tarefa 8 — rand, rand_r e falso compartilhamento (Linux/WSL)
+cd ../tarefa-8
+gcc -O2 -Wall -Wextra -std=c11 -fopenmp pi_rand_openmp.c -o pi_rand_openmp
 ```
 
 Todos os fontes em C compilam sem emitir nenhum aviso com `-Wall -Wextra`.
@@ -103,5 +108,8 @@ cd ../../tarefa-6/relatorio
 python build_pdf.py
 
 cd ../../tarefa-7/relatorio
+python build_pdf.py
+
+cd ../../tarefa-8/relatorio
 python build_pdf.py
 ```

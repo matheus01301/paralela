@@ -1,0 +1,53 @@
+﻿Tarefa 8 - rand, rand_r e falso compartilhamento
+Pontos: 10000000 | Threads: 16 | Execucoes: 5 | Semente: 2026
+Ambiente: Ubuntu 24.04 no WSL 2, glibc
+
+--- Execucao 1 ---
+Monte Carlo para pi
+Pontos: 10000000 | Threads: 16 | Semente: 2026
+
+Versao                  Acertos          pi    Tempo (s)
+rand + critical         7853554   3.141421600     0.979307
+rand + vetor            7852507   3.141002800     1.034639
+rand_r + critical       7853561   3.141424400     0.013437
+rand_r + vetor          7853561   3.141424400     0.038935
+--- Execucao 2 ---
+Monte Carlo para pi
+Pontos: 10000000 | Threads: 16 | Semente: 2026
+
+Versao                  Acertos          pi    Tempo (s)
+rand + critical         7854508   3.141803200     0.839048
+rand + vetor            7854016   3.141606400     0.947555
+rand_r + critical       7853561   3.141424400     0.012115
+rand_r + vetor          7853561   3.141424400     0.040109
+
+--- Execucao 3 ---
+Monte Carlo para pi
+Pontos: 10000000 | Threads: 16 | Semente: 2026
+
+Versao                  Acertos          pi    Tempo (s)
+rand + critical         7854543   3.141817200     0.818465
+rand + vetor            7854337   3.141734800     0.932768
+rand_r + critical       7853561   3.141424400     0.013797
+rand_r + vetor          7853561   3.141424400     0.039088
+
+--- Execucao 4 ---
+Monte Carlo para pi
+Pontos: 10000000 | Threads: 16 | Semente: 2026
+
+Versao                  Acertos          pi    Tempo (s)
+rand + critical         7854701   3.141880400     0.853283
+rand + vetor            7853869   3.141547600     0.953969
+rand_r + critical       7853561   3.141424400     0.015060
+rand_r + vetor          7853561   3.141424400     0.037942
+
+--- Execucao 5 ---
+Monte Carlo para pi
+Pontos: 10000000 | Threads: 16 | Semente: 2026
+
+Versao                  Acertos          pi    Tempo (s)
+rand + critical         7855753   3.142301200     0.743319
+rand + vetor            7853928   3.141571200     0.873044
+rand_r + critical       7853561   3.141424400     0.014627
+rand_r + vetor          7853561   3.141424400     0.036017
+Fim dos resultados.

@@ -7,9 +7,11 @@ RETOMAR-AMANHA.md
 *.o
 *.obj
 *.out
+tarefa-8/pi_rand_openmp
 
 # Intermediário do gerador de PDF (o relatorio.pdf, sim, é versionado)
 relatorio.html
+.tmp-task8-pdf/
 
 # Python
 __pycache__/
