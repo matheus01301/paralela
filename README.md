@@ -15,6 +15,7 @@ plataformas, também em **TypeScript** sobre Node.
 | [`tarefa-6/`](tarefa-6/) | Estimativa estocástica de π: condição de corrida, `critical` e escopo de dados no OpenMP |
 | [`tarefa-7/`](tarefa-7/) | Lista encadeada com tarefas OpenMP: `task`, `single`, captura de dados e sincronização |
 | [`tarefa-8/`](tarefa-8/) | Monte Carlo com `rand`/`rand_r`: coerência de cache e falso compartilhamento |
+| [`tarefa-9/`](tarefa-9/) | Inserções concorrentes em listas encadeadas: `critical` nomeado e locks explícitos |
 
 Cada tarefa tem seu próprio `README.md`, um relatório em PDF com o código-fonte
 realçado e um `guia_apresentacao.md` com perguntas para a explicação presencial.
@@ -79,6 +80,10 @@ gcc -O2 -Wall -Wextra -std=c99 -fopenmp lista_tarefas.c -o lista_tarefas.exe
 # Tarefa 8 — rand, rand_r e falso compartilhamento (Linux/WSL)
 cd ../tarefa-8
 gcc -O2 -Wall -Wextra -std=c11 -fopenmp pi_rand_openmp.c -o pi_rand_openmp
+
+# Tarefa 9 — listas encadeadas com critical nomeado e locks explícitos
+cd ../tarefa-9
+gcc -O2 -Wall -Wextra -std=c11 -fopenmp listas_insercoes.c -o listas_insercoes.exe
 ```
 
 Todos os fontes em C compilam sem emitir nenhum aviso com `-Wall -Wextra`.
@@ -111,5 +116,8 @@ cd ../../tarefa-7/relatorio
 python build_pdf.py
 
 cd ../../tarefa-8/relatorio
+python build_pdf.py
+
+cd ../../tarefa-9/relatorio
 python build_pdf.py
 ```

@@ -1,0 +1,57 @@
+﻿Tarefa 9 - insercoes concorrentes em listas encadeadas
+N: 200000 | Threads: 8 | Listas: 8 | Execucoes: 5
+
+--- Execucao 1 ---
+Tarefa 9 - insercoes concorrentes em listas encadeadas
+N: 200000 | threads: 8 | listas na generalizacao: 8 | semente: 2026
+
+Versao                       Tempo (s)    Inseridos   Falhas   Integridade
+2 listas: critical comum        0.576000       200000        0   OK
+2 listas: critical nomeado      0.560000       200000        0   OK
+N listas: locks explicitos      0.408000       200000        0   OK
+
+Razao comum/nomeado: 1.029x
+
+--- Execucao 2 ---
+Tarefa 9 - insercoes concorrentes em listas encadeadas
+N: 200000 | threads: 8 | listas na generalizacao: 8 | semente: 2027
+
+Versao                       Tempo (s)    Inseridos   Falhas   Integridade
+2 listas: critical comum        0.581000       200000        0   OK
+2 listas: critical nomeado      0.571000       200000        0   OK
+N listas: locks explicitos      0.426000       200000        0   OK
+
+Razao comum/nomeado: 1.018x
+
+--- Execucao 3 ---
+Tarefa 9 - insercoes concorrentes em listas encadeadas
+N: 200000 | threads: 8 | listas na generalizacao: 8 | semente: 2028
+
+Versao                       Tempo (s)    Inseridos   Falhas   Integridade
+2 listas: critical comum        0.588000       200000        0   OK
+2 listas: critical nomeado      0.546000       200000        0   OK
+N listas: locks explicitos      0.439000       200000        0   OK
+
+Razao comum/nomeado: 1.077x
+
+--- Execucao 4 ---
+Tarefa 9 - insercoes concorrentes em listas encadeadas
+N: 200000 | threads: 8 | listas na generalizacao: 8 | semente: 2029
+
+Versao                       Tempo (s)    Inseridos   Falhas   Integridade
+2 listas: critical comum        0.560000       200000        0   OK
+2 listas: critical nomeado      0.563000       200000        0   OK
+N listas: locks explicitos      0.438000       200000        0   OK
+
+Razao comum/nomeado: 0.995x
+
+--- Execucao 5 ---
+Tarefa 9 - insercoes concorrentes em listas encadeadas
+N: 200000 | threads: 8 | listas na generalizacao: 8 | semente: 2030
+
+Versao                       Tempo (s)    Inseridos   Falhas   Integridade
+2 listas: critical comum        0.577000       200000        0   OK
+2 listas: critical nomeado      0.583000       200000        0   OK
+N listas: locks explicitos      0.362000       200000        0   OK
+
+Razao comum/nomeado: 0.990x
