@@ -1,0 +1,66 @@
+﻿Tarefa 10 - critical, atomic, contadores privados e reduction
+Pontos: 20000000 | Threads: 8 | Execucoes: 5
+
+--- Execucao 1 ---
+Tarefa 10 - sincronizacao da soma de hits com rand_r
+Pontos: 20000000 | threads: 8 | semente: 2026
+
+Versao                            Hits          pi  Atualiz. explic. Tempo (s)
+compartilhado + critical      15708667   3.141733400     15708667    1.086000
+compartilhado + atomic        15708667   3.141733400     15708667    0.190000
+privado + critical            15708667   3.141733400            8    0.020000
+privado + atomic              15708667   3.141733400            8    0.018000
+reduction                     15708667   3.141733400            0    0.018000
+
+Validacao (mesmo numero de hits): OK
+--- Execucao 2 ---
+Tarefa 10 - sincronizacao da soma de hits com rand_r
+Pontos: 20000000 | threads: 8 | semente: 2027
+
+Versao                            Hits          pi  Atualiz. explic. Tempo (s)
+compartilhado + critical      15707684   3.141536800     15707684    1.122000
+compartilhado + atomic        15707684   3.141536800     15707684    0.190000
+privado + critical            15707684   3.141536800            8    0.018000
+privado + atomic              15707684   3.141536800            8    0.019000
+reduction                     15707684   3.141536800            0    0.019000
+
+Validacao (mesmo numero de hits): OK
+--- Execucao 3 ---
+Tarefa 10 - sincronizacao da soma de hits com rand_r
+Pontos: 20000000 | threads: 8 | semente: 2028
+
+Versao                            Hits          pi  Atualiz. explic. Tempo (s)
+compartilhado + critical      15708192   3.141638400     15708192    1.088000
+compartilhado + atomic        15708192   3.141638400     15708192    0.191000
+privado + critical            15708192   3.141638400            8    0.019000
+privado + atomic              15708192   3.141638400            8    0.019000
+reduction                     15708192   3.141638400            0    0.018000
+
+Validacao (mesmo numero de hits): OK
+
+--- Execucao 4 ---
+Tarefa 10 - sincronizacao da soma de hits com rand_r
+Pontos: 20000000 | threads: 8 | semente: 2029
+
+Versao                            Hits          pi  Atualiz. explic. Tempo (s)
+compartilhado + critical      15707976   3.141595200     15707976    1.074000
+compartilhado + atomic        15707976   3.141595200     15707976    0.196000
+privado + critical            15707976   3.141595200            8    0.021000
+privado + atomic              15707976   3.141595200            8    0.018000
+reduction                     15707976   3.141595200            0    0.019000
+
+Validacao (mesmo numero de hits): OK
+
+--- Execucao 5 ---
+Tarefa 10 - sincronizacao da soma de hits com rand_r
+Pontos: 20000000 | threads: 8 | semente: 2030
+
+Versao                            Hits          pi  Atualiz. explic. Tempo (s)
+compartilhado + critical      15707483   3.141496600     15707483    1.098000
+compartilhado + atomic        15707483   3.141496600     15707483    0.188000
+privado + critical            15707483   3.141496600            8    0.018000
+privado + atomic              15707483   3.141496600            8    0.020000
+reduction                     15707483   3.141496600            0    0.019000
+
+Validacao (mesmo numero de hits): OK
+
