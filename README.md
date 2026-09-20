@@ -18,6 +18,7 @@ plataformas, também em **TypeScript** sobre Node.
 | [`tarefa-9/`](tarefa-9/) | Inserções concorrentes em listas encadeadas: `critical` nomeado e locks explícitos |
 | [`tarefa-10/`](tarefa-10/) | Monte Carlo com `critical`, `atomic`, privatização e `reduction` |
 | [`tarefa-11/`](tarefa-11/) | Difusão viscosa (Navier-Stokes sem pressão) por diferenças finitas: impacto de `schedule` e `collapse` |
+| [`tarefa-12/`](tarefa-12/) | Escalabilidade forte e fraca do Navier-Stokes: gargalos e cinco versões otimizadas |
 
 Cada tarefa tem seu próprio `README.md`, um relatório em PDF com o código-fonte
 realçado e um `guia_apresentacao.md` com perguntas para a explicação presencial.
@@ -55,6 +56,7 @@ A partir da Tarefa 11, **NPAD/UFRN**:
 | Memória | 512 GB |
 | SO | Linux 4.18 (RHEL 8) |
 | Compilador C | gcc 8.5.0 |
+| CPU (detalhe) | 2 × AMD EPYC 7713, 8 domínios NUMA, 32 MB de L3 por CCX de 8 núcleos |
 | Escalonador | Slurm (`sbatch job_npad.sh`) |
 | Threads | `OMP_PLACES=cores`, `OMP_PROC_BIND=close` |
 
@@ -112,6 +114,11 @@ gcc -O2 -Wall -Wextra -std=c11 -fopenmp pi_sincronizacao.c -o pi_sincronizacao.e
 cd ../tarefa-11
 gcc -O2 -Wall -Wextra -std=c11 -fopenmp difusao_viscosa.c -o difusao_viscosa -lm
 sbatch job_npad.sh        # no NPAD
+
+# Tarefa 12 — escalabilidade forte e fraca (NPAD)
+cd ../tarefa-12
+gcc -O2 -Wall -Wextra -std=c11 -fopenmp escalabilidade.c -o escalabilidade -lm
+sbatch job_npad.sh        # no NPAD
 ```
 
 Todos os fontes em C compilam sem emitir nenhum aviso com `-Wall -Wextra`.
@@ -153,5 +160,9 @@ cd ../../tarefa-10/relatorio
 python build_pdf.py
 
 cd ../../tarefa-11/relatorio
+python build_pdf.py
+
+cd ../../tarefa-12/relatorio
+python graficos.py        # gera os SVG a partir de resultados.txt
 python build_pdf.py
 ```

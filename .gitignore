@@ -9,6 +9,7 @@ RETOMAR-AMANHA.md
 *.out
 tarefa-8/pi_rand_openmp
 tarefa-11/difusao_viscosa
+tarefa-12/escalabilidade
 
 # Intermediário do gerador de PDF (o relatorio.pdf, sim, é versionado)
 relatorio.html
