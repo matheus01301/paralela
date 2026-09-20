@@ -14,9 +14,9 @@ gargalos identificados e removidos em cinco versões sucessivas.
 As cinco versões são verificadas byte a byte contra a `v0` sequencial em 1, 8 e
 64 threads antes de qualquer medição de tempo.
 
-**Resultado:** 66× do sequencial original até a `v4` em 128 threads, mas o
-programa **não é fortemente nem fracamente escalável** — eficiência final de 0,38
-e 0,09. O gargalo dominante é capacidade de L3 agregado, e no limite, banda de
+**Resultado:** 90× do sequencial original até a `v4` em 128 threads, mas o
+programa **não é fortemente nem fracamente escalável** — eficiência final de 0,56
+e 0,11. O gargalo dominante é capacidade de L3 agregado, e no limite, banda de
 memória.
 
 ## Executar

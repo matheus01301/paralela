@@ -19,6 +19,7 @@ plataformas, também em **TypeScript** sobre Node.
 | [`tarefa-10/`](tarefa-10/) | Monte Carlo com `critical`, `atomic`, privatização e `reduction` |
 | [`tarefa-11/`](tarefa-11/) | Difusão viscosa (Navier-Stokes sem pressão) por diferenças finitas: impacto de `schedule` e `collapse` |
 | [`tarefa-12/`](tarefa-12/) | Escalabilidade forte e fraca do Navier-Stokes: gargalos e cinco versões otimizadas |
+| [`tarefa-13/`](tarefa-13/) | Afinidade de threads: `OMP_PROC_BIND`, `OMP_PLACES`, `numactl` e `GOMP_CPU_AFFINITY` |
 
 Cada tarefa tem seu próprio `README.md`, um relatório em PDF com o código-fonte
 realçado e um `guia_apresentacao.md` com perguntas para a explicação presencial.
@@ -51,7 +52,7 @@ A partir da Tarefa 11, **NPAD/UFRN**:
 
 | | |
 |---|---|
-| Máquina | partição `amd-512`, nó `r2n00`, alocado com `--exclusive` |
+| Máquina | partição `amd-512`, nó `r2n19` (tarefas 12 e 13), alocado com `--exclusive` |
 | CPU | 2 sockets × 64 núcleos, 2 threads por núcleo (128 físicos, 256 lógicos) |
 | Memória | 512 GB |
 | SO | Linux 4.18 (RHEL 8) |
@@ -119,6 +120,11 @@ sbatch job_npad.sh        # no NPAD
 cd ../tarefa-12
 gcc -O2 -Wall -Wextra -std=c11 -fopenmp escalabilidade.c -o escalabilidade -lm
 sbatch job_npad.sh        # no NPAD
+
+# Tarefa 13 — afinidade de threads (NPAD, mesmo nó da 12)
+cd ../tarefa-13
+gcc -O2 -Wall -Wextra -std=c11 -fopenmp afinidade.c -o afinidade -lm
+sbatch job_npad.sh        # no NPAD
 ```
 
 Todos os fontes em C compilam sem emitir nenhum aviso com `-Wall -Wextra`.
@@ -164,5 +170,9 @@ python build_pdf.py
 
 cd ../../tarefa-12/relatorio
 python graficos.py        # gera os SVG a partir de resultados.txt
+python build_pdf.py
+
+cd ../../tarefa-13/relatorio
+python graficos.py
 python build_pdf.py
 ```

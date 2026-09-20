@@ -1,6 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=escalabilidade
 #SBATCH --partition=amd-512
+#SBATCH --nodelist=r2n19
 #SBATCH --time=0-0:40
 #SBATCH --nodes=1
 #SBATCH --exclusive

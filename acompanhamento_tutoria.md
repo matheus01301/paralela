@@ -3,7 +3,8 @@
 Este índice registra o progresso das tarefas. Os enunciados das Tarefas 1 a 10
 estão em [enunciados_tarefas_1_a_10.md](enunciados_tarefas_1_a_10.md); o da
 Tarefa 11 está em [tarefa-11/PROMPT-CONTINUACAO.md](tarefa-11/PROMPT-CONTINUACAO.md); o da
-Tarefa 12 está no topo de [tarefa-12/tutoria.md](tarefa-12/tutoria.md).
+Tarefa 12 está no topo de [tarefa-12/tutoria.md](tarefa-12/tutoria.md), e o da
+Tarefa 13 no topo de [tarefa-13/tutoria.md](tarefa-13/tutoria.md).
 Cada pasta possui seu próprio `tutoria.md`.
 
 A partir da Tarefa 11 as atividades passaram a rodar no **NPAD/UFRN**
@@ -42,6 +43,7 @@ sendo gerados para o estudo posterior.
 | 10 | estudo guiado concluído; aluno declarou conseguir explicá-la | pendente |
 | 11 | entregue sem tutoria passo a passo; estudo pendente | pendente |
 | 12 | entregue sem tutoria passo a passo; estudo pendente | pendente |
+| 13 | entregue sem tutoria passo a passo; estudo pendente | pendente |
 
 ## Arquivos de acompanhamento
 
@@ -57,3 +59,4 @@ sendo gerados para o estudo posterior.
 - [Tarefa 10](tarefa-10/tutoria.md)
 - [Tarefa 11](tarefa-11/tutoria.md)
 - [Tarefa 12](tarefa-12/tutoria.md)
+- [Tarefa 13](tarefa-13/tutoria.md)
