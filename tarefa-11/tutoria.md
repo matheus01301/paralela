@@ -2,7 +2,14 @@
 
 ## Etapa atual
 
-Interpretação do enunciado. O código ainda não foi escrito.
+Atividade concluída: código, medições no NPAD, relatório em PDF e guia de
+defesa. Executada em ritmo de entrega, não de tutoria passo a passo — o aluno
+precisou enviar 11, 12 e 13 rapidamente e vai estudar depois.
+
+**Para estudar depois:** o `guia_apresentacao.md` tem o roteiro completo. Os
+pontos que mais provavelmente caem são o limite `r <= 1/4`, o motivo de existirem
+duas matrizes, e por que `dynamic` com `collapse(2)` ficou 10x mais lento que o
+sequencial.
 
 ## O que a atividade pede
 
@@ -70,8 +77,38 @@ não são necessários para responder ao enunciado.
 - Localidade temporal: os valores do estado atual são reutilizados para calcular
   células vizinhas antes de saírem do cache.
 
-## Expectativa de desempenho
+## Expectativa de desempenho e o que foi medido
 
-O trabalho por célula é uniforme. Por isso, `static` provavelmente será mais
-rápido que `dynamic` e `guided`, pois não precisa redistribuir trabalho durante o
-laço. Essa é apenas a hipótese; a conclusão deverá usar os tempos medidos.
+A hipótese era que `static` venceria, porque o trabalho por célula é uniforme e
+não há desbalanceamento a corrigir. Confirmou-se.
+
+Medições no NPAD (nó `r2n00` da partição `amd-512`, exclusivo, malha 1024x1024,
+200 passos, mediana de 5 execuções):
+
+| schedule | collapse | 16 thr | 32 thr | 64 thr |
+|---|---|---:|---:|---:|
+| sequencial | - | 0,6973 | 0,6977 | 0,6974 |
+| `static` | não | **0,0567** | **0,0315** | **0,0218** |
+| `static` | `collapse(2)` | 0,1068 | 0,0558 | 0,0323 |
+| `dynamic` | não | 0,2290 | 0,2183 | 0,2866 |
+| `dynamic` | `collapse(2)` | 7,4154 | 6,9383 | 7,0872 |
+| `guided` | não | 0,1796 | 0,1461 | 0,1397 |
+| `guided` | `collapse(2)` | 0,1925 | 0,1502 | 0,1476 |
+
+O que a teoria sozinha não daria:
+
+- `dynamic` **não** melhora com mais threads: 0,2290 s com 16 e 0,2866 s com 64.
+  Só `static` escalou de verdade.
+- `dynamic` com `collapse(2)` ficou 10x mais lento que o código sequencial:
+  bloco padrão 1 sobre 1.048.576 iterações dá ~210 milhões de entregas
+  sincronizadas.
+- O speedup é sublinear (77% -> 69% -> 50% de eficiência) porque o problema é
+  limitado por memória, não por CPU.
+- Repetindo o experimento, só `static` se reproduziu dentro de 1%. `guided` em
+  64 threads deu 0,2345 s numa rodada e 0,1397 s na seguinte — o custo das
+  políticas dinâmicas depende de disputa em tempo de execução. Cuidado para não
+  afirmar na defesa que `guided` piora com mais threads: isso era ruído.
+
+Nada foi otimizado de propósito. O gargalo de *first touch* / NUMA foi deixado
+no lugar e registrado no relatório, porque corrigi-lo mascararia o efeito que o
+enunciado manda observar.

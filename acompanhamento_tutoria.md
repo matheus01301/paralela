@@ -1,8 +1,16 @@
 # Acompanhamento da tutoria
 
-Este índice registra o progresso das Tarefas 1 a 10. Os enunciados completos
-estão em [enunciados_tarefas_1_a_10.md](enunciados_tarefas_1_a_10.md), e cada
-pasta possui seu próprio `tutoria.md`.
+Este índice registra o progresso das tarefas. Os enunciados das Tarefas 1 a 10
+estão em [enunciados_tarefas_1_a_10.md](enunciados_tarefas_1_a_10.md); o da
+Tarefa 11 está em [tarefa-11/PROMPT-CONTINUACAO.md](tarefa-11/PROMPT-CONTINUACAO.md).
+Cada pasta possui seu próprio `tutoria.md`.
+
+A partir da Tarefa 11 as atividades passaram a rodar no **NPAD/UFRN**
+(`ssh npad`, partição `amd-512`), não mais na máquina local.
+
+**Mudança de ritmo (Unidade 2):** as Tarefas 11, 12 e 13 estão sendo entregues
+primeiro e estudadas depois, por prazo. Os `guia_apresentacao.md` continuam
+sendo gerados para o estudo posterior.
 
 ## Formato combinado para as defesas
 
@@ -31,6 +39,7 @@ pasta possui seu próprio `tutoria.md`.
 | 8 | conceitos principais estudados; revisão ainda útil | sorteio anterior cancelado |
 | 9 | defesa realizada; revisar ciclo de vida e generalização | concluída: 6,5/10 |
 | 10 | estudo guiado concluído; aluno declarou conseguir explicá-la | pendente |
+| 11 | entregue sem tutoria passo a passo; estudo pendente | pendente |
 
 ## Arquivos de acompanhamento
 
@@ -44,3 +53,4 @@ pasta possui seu próprio `tutoria.md`.
 - [Tarefa 8](tarefa-8/tutoria.md)
 - [Tarefa 9](tarefa-9/tutoria.md)
 - [Tarefa 10](tarefa-10/tutoria.md)
+- [Tarefa 11](tarefa-11/tutoria.md)

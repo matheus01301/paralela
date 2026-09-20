@@ -17,6 +17,7 @@ plataformas, também em **TypeScript** sobre Node.
 | [`tarefa-8/`](tarefa-8/) | Monte Carlo com `rand`/`rand_r`: coerência de cache e falso compartilhamento |
 | [`tarefa-9/`](tarefa-9/) | Inserções concorrentes em listas encadeadas: `critical` nomeado e locks explícitos |
 | [`tarefa-10/`](tarefa-10/) | Monte Carlo com `critical`, `atomic`, privatização e `reduction` |
+| [`tarefa-11/`](tarefa-11/) | Difusão viscosa (Navier-Stokes sem pressão) por diferenças finitas: impacto de `schedule` e `collapse` |
 
 Cada tarefa tem seu próprio `README.md`, um relatório em PDF com o código-fonte
 realçado e um `guia_apresentacao.md` com perguntas para a explicação presencial.
@@ -36,12 +37,29 @@ Fixo para todos os programas, para que os números sejam comparáveis entre si:
 
 ## Ambiente das medições
 
+Tarefas 1 a 10, máquina local:
+
 | | |
 |---|---|
 | CPU | Intel i7-13650HX — 14 núcleos (6 P-cores + 8 E-cores), 20 threads |
 | SO | Windows 11 |
 | Compilador C | gcc 16.1.0 (MinGW-w64 UCRT), OpenMP 5.2 |
 | Runtime JS | Node v22.19.0 |
+
+A partir da Tarefa 11, **NPAD/UFRN**:
+
+| | |
+|---|---|
+| Máquina | partição `amd-512`, nó `r2n00`, alocado com `--exclusive` |
+| CPU | 2 sockets × 64 núcleos, 2 threads por núcleo (128 físicos, 256 lógicos) |
+| Memória | 512 GB |
+| SO | Linux 4.18 (RHEL 8) |
+| Compilador C | gcc 8.5.0 |
+| Escalonador | Slurm (`sbatch job_npad.sh`) |
+| Threads | `OMP_PLACES=cores`, `OMP_PROC_BIND=close` |
+
+Acesso: `ssh npad` (atalho em `~/.ssh/config` para
+`mrmarinho@sc2.npad.ufrn.br` na porta 4422).
 
 ## Como compilar
 
@@ -89,6 +107,11 @@ gcc -O2 -Wall -Wextra -std=c11 -fopenmp listas_insercoes.c -o listas_insercoes.e
 # Tarefa 10 — comparação de mecanismos de sincronização
 cd ../tarefa-10
 gcc -O2 -Wall -Wextra -std=c11 -fopenmp pi_sincronizacao.c -o pi_sincronizacao.exe
+
+# Tarefa 11 — difusão viscosa, schedule e collapse (NPAD)
+cd ../tarefa-11
+gcc -O2 -Wall -Wextra -std=c11 -fopenmp difusao_viscosa.c -o difusao_viscosa -lm
+sbatch job_npad.sh        # no NPAD
 ```
 
 Todos os fontes em C compilam sem emitir nenhum aviso com `-Wall -Wextra`.
@@ -127,5 +150,8 @@ cd ../../tarefa-9/relatorio
 python build_pdf.py
 
 cd ../../tarefa-10/relatorio
+python build_pdf.py
+
+cd ../../tarefa-11/relatorio
 python build_pdf.py
 ```

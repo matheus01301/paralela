@@ -120,15 +120,14 @@ Não inclua `sections` nem `simd` inicialmente. Essas construções apareceram n
 anotações da aula, mas não são necessárias para responder ao enunciado. Se alguma
 delas for sugerida depois, explique primeiro por que seria realmente necessária.
 
-## Ponto exato em que paramos
+## Situação atual (atualizado)
 
-Ainda não existe código da simulação. Já entendemos o modelo matemático, a
-atualização por diferenças finitas, a necessidade de dois estados, o limite de
-estabilidade e a escolha das bordas periódicas.
+A Tarefa 11 está **concluída**: `difusao_viscosa.c`, `job_npad.sh`, medições no
+NPAD em `resultados.txt`, `relatorio/relatorio.pdf` e `guia_apresentacao.md`.
 
-O próximo passo deve ser explicar como representar a malha na memória e montar
-um pseudocódigo sequencial pequeno. Não escreva a atividade completa de uma vez.
-Depois, conduza nesta ordem:
+Os sete passos planejados abaixo foram todos executados, porém em ritmo de
+entrega, sem as paradas de tutoria — o aluno precisou entregar 11, 12 e 13 com
+prazo curto e vai estudar depois pelo `guia_apresentacao.md`.
 
 1. implementação sequencial mínima;
 2. teste do campo parado ou constante;
@@ -137,7 +136,5 @@ Depois, conduza nesta ordem:
 5. paralelização com OpenMP;
 6. experimentos com `schedule` e `collapse`;
 7. relatório simples em PDF com código realçado;
-8. roteiro curto e simulação da defesa oral.
-
-Continue a tutoria fazendo perguntas curtas para confirmar que eu entendi cada
-parte antes de avançar.
+8. roteiro curto e simulação da defesa oral — **roteiro pronto, simulação da
+   defesa ainda não feita**.

@@ -1,0 +1,63 @@
+no: r2n00.npad.internal   cpus alocadas: 64
+gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-18)
+
+==================== 16 threads ====================
+Malha 1024 x 1024   h = 9.766e-04   viscosidade = 0.01   dt = 1.907e-05   r = 0.20
+Passos = 200   threads = 16   execucoes = 5
+
+Validacao (sequencial)
+1) fluido parado       u=0, v=0        maior |u| = 0.000e+00   maior |v| = 0.000e+00
+2) campo constante     u=2.0, v=-1.0    desvio |u| = 0.000e+00   desvio |v| = 0.000e+00
+3) perturbacao central pico 2.000000 -> 1.001986   soma 1048577.0000 -> 1048577.0000 (erro 1.537e-08)
+4) mesmo teste com r = 0.30 (acima de 1/4)     pico final = 3.115e+26
+
+Desempenho (mediana de 5 execucoes)
+schedule   collapse       tempo (s)   speedup   confere
+-          -                 0.6973      1.00         -
+static     nao               0.0567     12.30       sim
+static     collapse(2)       0.1068      6.53       sim
+dynamic    nao               0.2290      3.04       sim
+dynamic    collapse(2)       7.4154      0.09       sim
+guided     nao               0.1796      3.88       sim
+guided     collapse(2)       0.1925      3.62       sim
+
+==================== 32 threads ====================
+Malha 1024 x 1024   h = 9.766e-04   viscosidade = 0.01   dt = 1.907e-05   r = 0.20
+Passos = 200   threads = 32   execucoes = 5
+
+Validacao (sequencial)
+1) fluido parado       u=0, v=0        maior |u| = 0.000e+00   maior |v| = 0.000e+00
+2) campo constante     u=2.0, v=-1.0    desvio |u| = 0.000e+00   desvio |v| = 0.000e+00
+3) perturbacao central pico 2.000000 -> 1.001986   soma 1048577.0000 -> 1048577.0000 (erro 1.537e-08)
+4) mesmo teste com r = 0.30 (acima de 1/4)     pico final = 3.115e+26
+
+Desempenho (mediana de 5 execucoes)
+schedule   collapse       tempo (s)   speedup   confere
+-          -                 0.6977      1.00         -
+static     nao               0.0315     22.14       sim
+static     collapse(2)       0.0558     12.50       sim
+dynamic    nao               0.2183      3.20       sim
+dynamic    collapse(2)       6.9383      0.10       sim
+guided     nao               0.1461      4.78       sim
+guided     collapse(2)       0.1502      4.65       sim
+
+==================== 64 threads ====================
+Malha 1024 x 1024   h = 9.766e-04   viscosidade = 0.01   dt = 1.907e-05   r = 0.20
+Passos = 200   threads = 64   execucoes = 5
+
+Validacao (sequencial)
+1) fluido parado       u=0, v=0        maior |u| = 0.000e+00   maior |v| = 0.000e+00
+2) campo constante     u=2.0, v=-1.0    desvio |u| = 0.000e+00   desvio |v| = 0.000e+00
+3) perturbacao central pico 2.000000 -> 1.001986   soma 1048577.0000 -> 1048577.0000 (erro 1.537e-08)
+4) mesmo teste com r = 0.30 (acima de 1/4)     pico final = 3.115e+26
+
+Desempenho (mediana de 5 execucoes)
+schedule   collapse       tempo (s)   speedup   confere
+-          -                 0.6974      1.00         -
+static     nao               0.0218     32.06       sim
+static     collapse(2)       0.0323     21.62       sim
+dynamic    nao               0.2866      2.43       sim
+dynamic    collapse(2)       7.0872      0.10       sim
+guided     nao               0.1397      4.99       sim
+guided     collapse(2)       0.1476      4.73       sim
+
