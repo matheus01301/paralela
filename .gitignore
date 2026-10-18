@@ -11,6 +11,9 @@ tarefa-8/pi_rand_openmp
 tarefa-11/difusao_viscosa
 tarefa-12/escalabilidade
 tarefa-13/afinidade
+tarefa-16/matriz_vetor_mpi
+tarefa-17/matriz_vetor_colunas_mpi
+tarefa-17/matriz_vetor_linhas_mpi
 
 # Intermediário do gerador de PDF (o relatorio.pdf, sim, é versionado)
 relatorio.html

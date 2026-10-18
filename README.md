@@ -20,6 +20,8 @@ plataformas, também em **TypeScript** sobre Node.
 | [`tarefa-11/`](tarefa-11/) | Difusão viscosa (Navier-Stokes sem pressão) por diferenças finitas: impacto de `schedule` e `collapse` |
 | [`tarefa-12/`](tarefa-12/) | Escalabilidade forte e fraca do Navier-Stokes: gargalos e cinco versões otimizadas |
 | [`tarefa-13/`](tarefa-13/) | Afinidade de threads: `OMP_PROC_BIND`, `OMP_PLACES`, `numactl` e `GOMP_CPU_AFFINITY` |
+| [`tarefa-16/`](tarefa-16/) | Produto matriz-vetor com MPI: `Scatter`, `Bcast`, `Gather` e comparação de tempos |
+| [`tarefa-17/`](tarefa-17/) | Produto matriz-vetor por colunas com MPI: tipos derivados, `Scatter` e `Reduce` |
 
 Cada tarefa tem seu próprio `README.md`, um relatório em PDF com o código-fonte
 realçado e um `guia_apresentacao.md` com perguntas para a explicação presencial.
@@ -125,6 +127,16 @@ sbatch job_npad.sh        # no NPAD
 cd ../tarefa-13
 gcc -O2 -Wall -Wextra -std=c11 -fopenmp afinidade.c -o afinidade -lm
 sbatch job_npad.sh        # no NPAD
+
+# Tarefa 16 — produto matriz-vetor com MPI (NPAD)
+cd ../tarefa-16
+mpicc -O2 -Wall -Wextra -std=c11 matriz_vetor_mpi.c -o matriz_vetor_mpi
+sbatch job_npad.sh        # no NPAD
+
+# Tarefa 17 — distribuição por colunas (NPAD)
+cd ../tarefa-17
+mpicc -O2 -Wall -Wextra -std=c11 matriz_vetor_colunas_mpi.c -o matriz_vetor_colunas_mpi
+sbatch job_npad.sh        # no NPAD; também mede a Tarefa 16
 ```
 
 Todos os fontes em C compilam sem emitir nenhum aviso com `-Wall -Wextra`.
@@ -174,5 +186,11 @@ python build_pdf.py
 
 cd ../../tarefa-13/relatorio
 python graficos.py
+python build_pdf.py
+
+cd ../../tarefa-16/relatorio
+python build_pdf.py
+
+cd ../../tarefa-17/relatorio
 python build_pdf.py
 ```

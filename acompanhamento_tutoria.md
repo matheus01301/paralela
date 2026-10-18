@@ -41,7 +41,7 @@ sendo gerados para o estudo posterior.
 | 8 | conceitos principais estudados; revisão ainda útil | sorteio anterior cancelado |
 | 9 | defesa realizada; revisar ciclo de vida e generalização | concluída: 6,5/10 |
 | 10 | estudo guiado concluído; aluno declarou conseguir explicá-la | pendente |
-| 11 | entregue sem tutoria passo a passo; estudo pendente | pendente |
+| 11 | estudo passo a passo em andamento (ver `tarefa-11/RETOMAR-ESTUDO.md`) | pendente |
 | 12 | entregue sem tutoria passo a passo; estudo pendente | pendente |
 | 13 | entregue sem tutoria passo a passo; estudo pendente | pendente |
 

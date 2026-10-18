@@ -2,9 +2,27 @@
 
 ## Etapa atual
 
-Atividade concluída: código, medições no NPAD, relatório em PDF e guia de
-defesa. Executada em ritmo de entrega, não de tutoria passo a passo — o aluno
-precisou enviar 11, 12 e 13 rapidamente e vai estudar depois.
+Atividade entregue (código, medições no NPAD, relatório e guia) em ritmo de
+entrega. **Estudo passo a passo iniciado em 14/10/2026**, podendo refazer código
+e relatório para facilitar o entendimento.
+
+Plano do estudo: (1) enunciado e modelo, (2) Euler explícito e `r <= 1/4`,
+(3) código sequencial, (4) validações, (5) OpenMP, (6) resultados,
+(7) simplificar código, reescrever relatório com resumo executivo, glossário e
+perguntas, e simular a defesa.
+
+Progresso:
+- Etapas 1 e 2 concluídas. Entendeu "viscosidade suaviza diferenças", que o
+  laplaciano compara o centro com a **média** dos vizinhos, e o limite 1/4 como
+  "pesos da média ponderada não podem ficar negativos".
+- Errou de início: achou que dobrar `n` aumentaria `dt` (confundiu `n` com `h`).
+  Corrigiu: `n` maior → `h` menor → `dt` 4x menor. Revisar na simulação.
+- Próximo: ver `RETOMAR-ESTUDO.md` (pergunta pendente sobre vizinhos na grade 4x4).
+
+Correção a fazer no relatório: os ~290 GB/s do `static` não podem vir da DRAM
+(first touch deixa tudo num domínio NUMA). A explicação é o conjunto de dados
+(32 MB) caber no L3 agregado e o `static` manter as mesmas linhas na mesma
+thread a cada passo; `dynamic`/`guided` perdem essa afinidade.
 
 **Para estudar depois:** o `guia_apresentacao.md` tem o roteiro completo. Os
 pontos que mais provavelmente caem são o limite `r <= 1/4`, o motivo de existirem
