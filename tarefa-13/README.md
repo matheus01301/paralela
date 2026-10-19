@@ -1,44 +1,34 @@
 # Tarefa 13 — afinidade de threads e escalabilidade
 
-Mesmo código da Tarefa 12 (versão `v4`), mesmo nó (`r2n19`), variando apenas a
-política de afinidade das threads. Doze configurações, do OpenMP e do sistema
-operacional.
+O código de Navier-Stokes da Tarefa 11 (`schedule(static)`, inicialização em
+paralelo) rodado no mesmo nó da Tarefa 12 (`r2n19`), mudando só a afinidade das
+threads.
 
 | eixo | valores testados |
 |---|---|
-| `OMP_PROC_BIND` | `false`, `master`, `close`, `spread` |
-| `OMP_PLACES` | `threads`, `cores`, `sockets`, `numa_domains` (não suportado no gcc 8.5) |
-| sistema operacional | `GOMP_CPU_AFFINITY`, `numactl --interleave=all`, `numactl --cpunodebind` |
+| `OMP_PROC_BIND` (com `OMP_PLACES=cores`) | `false`, `true`, `close`, `spread`, `master` |
+| sistema operacional | `taskset -c 0-15`, `numactl --interleave=all` |
 
-O programa não supõe onde as threads foram parar: cada uma chama `sched_getcpu()`
-dentro da região paralela, e o resultado é cruzado com `/sys` para contar quantos
-domínios de L3, nós NUMA e CPUs distintas foram de fato ocupados.
-
-**Resultado:** `spread` é 2,4× mais rápido que `close` em 16 threads, e elimina o
-platô de escalabilidade encontrado na Tarefa 12 — que portanto era consequência da
-afinidade fixada, não do código. `master` degrada 16,6× em relação ao sequencial.
+Cada thread informa a CPU em que está (`sched_getcpu`), e o programa mede o tempo
+com 1 a 128 threads.
 
 ## Executar
 
 ```bash
-sbatch job_npad.sh
-cat slurm-<JobID>.out
+sbatch job_npad.sh          # no NPAD, no r2n19; saida em resultados.txt
 
-# direto, uma configuracao por vez
+# direto, uma configuracao
 gcc -O2 -Wall -Wextra -std=c11 -fopenmp afinidade.c -o afinidade -lm
-OMP_PROC_BIND=spread OMP_PLACES=cores ./afinidade spread_cores 2048 200 5 1,4,8,16,32,64,128
+OMP_PROC_BIND=spread OMP_PLACES=cores ./afinidade spread 128
 ```
-
-`TEMPO_BASE` fixa o T(1) usado como base de speedup, para que todas as
-configurações sejam comparáveis entre si. `MAPA=1` imprime o mapa `thread → cpu`.
 
 ## Arquivos
 
 | Arquivo | Conteúdo |
 |---|---|
-| `afinidade.c` | simulação, medição de tempo e leitura da topologia ocupada |
-| `job_npad.sh` | script Slurm com as doze configurações |
-| `resultados.txt` | saída usada no relatório (CSV) |
-| `relatorio/graficos.py` | gera os três SVG a partir do `resultados.txt` |
-| `relatorio/relatorio.pdf` | relatório com gráficos e código realçado |
-| `guia_apresentacao.md` | roteiro para a defesa oral |
+| `afinidade.c` | simulação, medição e mapa thread → CPU |
+| `job_npad.sh` | script Slurm com as sete configurações |
+| `resultados.txt` | saída usada no relatório |
+| `relatorio/graficos.py` | gera `tempo.svg` |
+| `relatorio/relatorio.pdf` | relatório com gráfico e código realçado |
+| `guia_apresentacao.md` | perguntas para a defesa oral |
