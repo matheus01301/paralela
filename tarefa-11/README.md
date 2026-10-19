@@ -14,7 +14,7 @@ dv/dt = nu * (d2v/dx2 + d2v/dy2)
 - Bordas periódicas (um campo constante continua constante também nas bordas).
 - Dois estados em memória (`atual` e `novo`), com troca de ponteiros a cada passo.
 
-O programa executa quatro validações sequenciais e depois compara sete versões
+O programa executa três validações sequenciais e depois compara sete versões
 do laço: sequencial e as combinações de `schedule(static|dynamic|guided)` com e
 sem `collapse(2)`. Todas as versões paralelas têm o resultado comparado byte a
 byte com o sequencial.
@@ -24,15 +24,14 @@ byte com o sequencial.
 No NPAD (Slurm):
 
 ```bash
-sbatch job_npad.sh
-cat slurm-<JobID>.out
+sbatch job_npad.sh          # 16, 32, 64 e 128 threads; saida em resultados.txt
 ```
 
 Direto:
 
 ```bash
 gcc -O2 -Wall -Wextra -std=c11 -fopenmp difusao_viscosa.c -o difusao_viscosa -lm
-./difusao_viscosa 1024 200 32 5      # n, passos, threads, execucoes
+./difusao_viscosa 1024 200 32      # n, passos, threads
 ```
 
 ## Arquivos

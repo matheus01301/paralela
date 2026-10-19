@@ -1,161 +1,107 @@
-#define _POSIX_C_SOURCE 199309L
-
 #include <math.h>
 #include <omp.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 
-typedef struct {
-    int n;
-    double h;
-    double viscosidade;
-    double dt;
-} Malha;
+static int n;                     /* a malha tem n x n celulas */
+static double fator;              /* viscosidade * dt / h^2 */
+static double *u, *v, *un, *vn;   /* passo atual (u, v) e proximo (un, vn) */
 
-typedef void (*Passo)(const Malha *, const double *, const double *,
-                      double *, double *);
-
-typedef struct {
-    const char *schedule;
-    const char *collapse;
-    Passo funcao;
-    double segundos;
-    int confere;
-} Versao;
-
-static double agora(void)
+/* Calcula a celula (i, j) do proximo passo. Bordas periodicas: o % faz a
+   malha dar a volta. */
+static inline void atualiza_celula(int i, int j)
 {
-    struct timespec t;
-    clock_gettime(CLOCK_MONOTONIC, &t);
-    return (double)t.tv_sec + (double)t.tv_nsec * 1e-9;
+    int cima = (i + n - 1) % n, baixo = (i + 1) % n;
+    int esq = (j + n - 1) % n, dir = (j + 1) % n;
+    int c = i * n + j;
+
+    double lap_u = u[cima * n + j] + u[baixo * n + j] + u[i * n + esq] + u[i * n + dir]
+                 - 4.0 * u[c];
+    double lap_v = v[cima * n + j] + v[baixo * n + j] + v[i * n + esq] + v[i * n + dir]
+                 - 4.0 * v[c];
+
+    un[c] = u[c] + fator * lap_u;
+    vn[c] = v[c] + fator * lap_v;
 }
 
-static double *aloca(int n)
+/* Um passo da simulacao. As sete versoes tem o mesmo laco; so a diretiva muda. */
+static void passo(int versao)
 {
-    double *p = malloc((size_t)n * (size_t)n * sizeof(double));
-    if (p == NULL) {
-        fprintf(stderr, "memoria insuficiente\n");
-        exit(EXIT_FAILURE);
-    }
-    return p;
-}
-
-static inline void atualiza_celula(const Malha *m,
-                                   const double *u, const double *v,
-                                   double *un, double *vn, int i, int j)
-{
-    const int n = m->n;
-    const int i_ant = (i + n - 1) % n;
-    const int i_prox = (i + 1) % n;
-    const int j_ant = (j + n - 1) % n;
-    const int j_prox = (j + 1) % n;
-    const int centro = i * n + j;
-    const double fator = m->viscosidade * m->dt / (m->h * m->h);
-
-    const double laplaciano_u = u[i_prox * n + j] + u[i_ant * n + j]
-                              + u[i * n + j_prox] + u[i * n + j_ant]
-                              - 4.0 * u[centro];
-    const double laplaciano_v = v[i_prox * n + j] + v[i_ant * n + j]
-                              + v[i * n + j_prox] + v[i * n + j_ant]
-                              - 4.0 * v[centro];
-
-    un[centro] = u[centro] + fator * laplaciano_u;
-    vn[centro] = v[centro] + fator * laplaciano_v;
-}
-
-static void passo_sequencial(const Malha *m, const double *u, const double *v,
-                             double *un, double *vn)
-{
-    for (int i = 0; i < m->n; i++)
-        for (int j = 0; j < m->n; j++)
-            atualiza_celula(m, u, v, un, vn, i, j);
-}
-
-static void passo_static(const Malha *m, const double *u, const double *v,
-                         double *un, double *vn)
-{
+    switch (versao) {
+    case 0:
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                atualiza_celula(i, j);
+        break;
+    case 1:
 #pragma omp parallel for schedule(static)
-    for (int i = 0; i < m->n; i++)
-        for (int j = 0; j < m->n; j++)
-            atualiza_celula(m, u, v, un, vn, i, j);
-}
-
-static void passo_static_collapse(const Malha *m, const double *u, const double *v,
-                                  double *un, double *vn)
-{
-#pragma omp parallel for collapse(2) schedule(static)
-    for (int i = 0; i < m->n; i++)
-        for (int j = 0; j < m->n; j++)
-            atualiza_celula(m, u, v, un, vn, i, j);
-}
-
-static void passo_dynamic(const Malha *m, const double *u, const double *v,
-                          double *un, double *vn)
-{
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                atualiza_celula(i, j);
+        break;
+    case 2:
+#pragma omp parallel for schedule(static) collapse(2)
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                atualiza_celula(i, j);
+        break;
+    case 3:
 #pragma omp parallel for schedule(dynamic)
-    for (int i = 0; i < m->n; i++)
-        for (int j = 0; j < m->n; j++)
-            atualiza_celula(m, u, v, un, vn, i, j);
-}
-
-static void passo_dynamic_collapse(const Malha *m, const double *u, const double *v,
-                                   double *un, double *vn)
-{
-#pragma omp parallel for collapse(2) schedule(dynamic)
-    for (int i = 0; i < m->n; i++)
-        for (int j = 0; j < m->n; j++)
-            atualiza_celula(m, u, v, un, vn, i, j);
-}
-
-static void passo_guided(const Malha *m, const double *u, const double *v,
-                         double *un, double *vn)
-{
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                atualiza_celula(i, j);
+        break;
+    case 4:
+#pragma omp parallel for schedule(dynamic) collapse(2)
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                atualiza_celula(i, j);
+        break;
+    case 5:
 #pragma omp parallel for schedule(guided)
-    for (int i = 0; i < m->n; i++)
-        for (int j = 0; j < m->n; j++)
-            atualiza_celula(m, u, v, un, vn, i, j);
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                atualiza_celula(i, j);
+        break;
+    case 6:
+#pragma omp parallel for schedule(guided) collapse(2)
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                atualiza_celula(i, j);
+        break;
+    }
 }
 
-static void passo_guided_collapse(const Malha *m, const double *u, const double *v,
-                                  double *un, double *vn)
-{
-#pragma omp parallel for collapse(2) schedule(guided)
-    for (int i = 0; i < m->n; i++)
-        for (int j = 0; j < m->n; j++)
-            atualiza_celula(m, u, v, un, vn, i, j);
-}
-
-static void simular(const Malha *m, double **u, double **v, double **un, double **vn,
-                    int passos, Passo passo)
+/* Avanca a simulacao. Depois de cada passo, o proximo vira o atual: so os
+   ponteiros sao trocados, sem copiar dados. */
+static void simular(int versao, int passos)
 {
     for (int t = 0; t < passos; t++) {
-        passo(m, *u, *v, *un, *vn);
-        double *troca;
-        troca = *u; *u = *un; *un = troca;
-        troca = *v; *v = *vn; *vn = troca;
+        passo(versao);
+        double *tmp = u; u = un; un = tmp;
+        tmp = v; v = vn; vn = tmp;
     }
 }
 
-static void preencher(double *campo, int n, double valor)
+static void inicia(double u0, double v0)
 {
-    for (int k = 0; k < n * n; k++)
-        campo[k] = valor;
+    for (int k = 0; k < n * n; k++) {
+        u[k] = u0;
+        v[k] = v0;
+    }
 }
 
-static double maior_desvio(const double *campo, int n, double referencia)
+static double maior_desvio(const double *campo, double referencia)
 {
     double maior = 0.0;
-    for (int k = 0; k < n * n; k++) {
-        double d = fabs(campo[k] - referencia);
-        if (d > maior)
-            maior = d;
-    }
+    for (int k = 0; k < n * n; k++)
+        if (fabs(campo[k] - referencia) > maior)
+            maior = fabs(campo[k] - referencia);
     return maior;
 }
 
-static double soma(const double *campo, int n)
+static double soma(const double *campo)
 {
     double s = 0.0;
     for (int k = 0; k < n * n; k++)
@@ -163,7 +109,7 @@ static double soma(const double *campo, int n)
     return s;
 }
 
-static double maximo(const double *campo, int n)
+static double maximo(const double *campo)
 {
     double maior = campo[0];
     for (int k = 1; k < n * n; k++)
@@ -172,182 +118,79 @@ static double maximo(const double *campo, int n)
     return maior;
 }
 
-static int comparar_double(const void *a, const void *b)
+/* Menor tempo entre algumas execucoes da simulacao com a perturbacao central. */
+static double medir(int versao, int passos, int execucoes)
 {
-    double x = *(const double *)a;
-    double y = *(const double *)b;
-    return (x > y) - (x < y);
-}
-
-static double mediana(double *v, int n)
-{
-    qsort(v, (size_t)n, sizeof(double), comparar_double);
-    return v[n / 2];
-}
-
-static double passo_de_tempo(const Malha *m, double r)
-{
-    return r * m->h * m->h / m->viscosidade;
-}
-
-static void teste_campo_parado(const Malha *m, int passos)
-{
-    double *u = aloca(m->n), *v = aloca(m->n);
-    double *un = aloca(m->n), *vn = aloca(m->n);
-
-    preencher(u, m->n, 0.0);
-    preencher(v, m->n, 0.0);
-    simular(m, &u, &v, &un, &vn, passos, passo_sequencial);
-
-    printf("1) fluido parado       u=0, v=0        maior |u| = %.3e   maior |v| = %.3e\n",
-           maior_desvio(u, m->n, 0.0), maior_desvio(v, m->n, 0.0));
-
-    free(u); free(v); free(un); free(vn);
-}
-
-static void teste_campo_constante(const Malha *m, int passos)
-{
-    const double u0 = 2.0, v0 = -1.0;
-    double *u = aloca(m->n), *v = aloca(m->n);
-    double *un = aloca(m->n), *vn = aloca(m->n);
-
-    preencher(u, m->n, u0);
-    preencher(v, m->n, v0);
-    simular(m, &u, &v, &un, &vn, passos, passo_sequencial);
-
-    printf("2) campo constante     u=%.1f, v=%.1f    desvio |u| = %.3e   desvio |v| = %.3e\n",
-           u0, v0, maior_desvio(u, m->n, u0), maior_desvio(v, m->n, v0));
-
-    free(u); free(v); free(un); free(vn);
-}
-
-static void teste_perturbacao(const Malha *m, int passos)
-{
-    double *u = aloca(m->n), *v = aloca(m->n);
-    double *un = aloca(m->n), *vn = aloca(m->n);
-
-    preencher(u, m->n, 1.0);
-    preencher(v, m->n, 0.0);
-    u[(m->n / 2) * m->n + m->n / 2] += 1.0;
-
-    double pico_inicial = maximo(u, m->n);
-    double soma_inicial = soma(u, m->n);
-
-    simular(m, &u, &v, &un, &vn, passos, passo_sequencial);
-
-    double pico_final = maximo(u, m->n);
-    double soma_final = soma(u, m->n);
-
-    printf("3) perturbacao central pico %.6f -> %.6f   soma %.4f -> %.4f (erro %.3e)\n",
-           pico_inicial, pico_final, soma_inicial, soma_final,
-           fabs(soma_final - soma_inicial));
-
-    free(u); free(v); free(un); free(vn);
-}
-
-static void teste_acima_do_limite(const Malha *base, int passos)
-{
-    const double r_instavel = 0.30;
-    Malha m = *base;
-    m.dt = passo_de_tempo(&m, r_instavel);
-
-    double *u = aloca(m.n), *v = aloca(m.n);
-    double *un = aloca(m.n), *vn = aloca(m.n);
-
-    preencher(u, m.n, 1.0);
-    preencher(v, m.n, 0.0);
-    u[(m.n / 2) * m.n + m.n / 2] += 1.0;
-
-    simular(&m, &u, &v, &un, &vn, passos, passo_sequencial);
-
-    printf("4) mesmo teste com r = %.2f (acima de 1/4)     pico final = %.3e\n",
-           r_instavel, maximo(u, m.n));
-
-    free(u); free(v); free(un); free(vn);
-}
-
-static double medir(const Malha *m, int passos, int execucoes, Passo passo,
-                    double *saida)
-{
-    double *tempos = malloc((size_t)execucoes * sizeof(double));
-    double *u = aloca(m->n), *v = aloca(m->n);
-    double *un = aloca(m->n), *vn = aloca(m->n);
-
+    double melhor = 1e30;
     for (int e = 0; e < execucoes; e++) {
-        preencher(u, m->n, 1.0);
-        preencher(v, m->n, 0.0);
-        u[(m->n / 2) * m->n + m->n / 2] += 1.0;
+        inicia(1.0, 0.0);
+        u[(n / 2) * n + n / 2] += 1.0;
 
-        double t0 = agora();
-        simular(m, &u, &v, &un, &vn, passos, passo);
-        tempos[e] = agora() - t0;
+        double inicio = omp_get_wtime();
+        simular(versao, passos);
+        double tempo = omp_get_wtime() - inicio;
+
+        if (tempo < melhor)
+            melhor = tempo;
     }
-
-    memcpy(saida, u, (size_t)m->n * (size_t)m->n * sizeof(double));
-
-    double t = mediana(tempos, execucoes);
-    free(tempos); free(u); free(v); free(un); free(vn);
-    return t;
+    return melhor;
 }
 
 int main(int argc, char *argv[])
 {
-    int n         = (argc > 1) ? atoi(argv[1]) : 1024;
-    int passos    = (argc > 2) ? atoi(argv[2]) : 200;
-    int threads   = (argc > 3) ? atoi(argv[3]) : omp_get_max_threads();
-    int execucoes = (argc > 4) ? atoi(argv[4]) : 5;
+    n = (argc > 1) ? atoi(argv[1]) : 1024;
+    int passos = (argc > 2) ? atoi(argv[2]) : 200;
+    int threads = (argc > 3) ? atoi(argv[3]) : omp_get_max_threads();
+    int execucoes = 5;
 
-    const double r = 0.20;
-    Malha m;
-    m.n = n;
-    m.h = 1.0 / (double)n;
-    m.viscosidade = 0.01;
-    m.dt = passo_de_tempo(&m, r);
+    double h = 1.0 / n, viscosidade = 0.01, r = 0.20;
+    double dt = r * h * h / viscosidade;   /* Euler explicito: estavel se r <= 1/4 */
+    fator = viscosidade * dt / (h * h);
 
     omp_set_num_threads(threads);
+    u = malloc(n * n * sizeof(double));
+    v = malloc(n * n * sizeof(double));
+    un = malloc(n * n * sizeof(double));
+    vn = malloc(n * n * sizeof(double));
+    double *referencia = malloc(n * n * sizeof(double));
 
-    printf("Malha %d x %d   h = %.3e   viscosidade = %.2f   dt = %.3e   r = %.2f\n",
-           n, n, m.h, m.viscosidade, m.dt, r);
-    printf("Passos = %d   threads = %d   execucoes = %d\n\n",
-           passos, threads, execucoes);
+    printf("Malha %d x %d, %d passos, dt = %.3e, r = %.2f, %d threads\n\n",
+           n, n, passos, dt, r, threads);
 
     printf("Validacao (sequencial)\n");
-    teste_campo_parado(&m, passos);
-    teste_campo_constante(&m, passos);
-    teste_perturbacao(&m, passos);
-    teste_acima_do_limite(&m, passos);
+    inicia(0.0, 0.0);
+    simular(0, passos);
+    printf("1) fluido parado (u=0, v=0): maior |u| = %.1e, maior |v| = %.1e\n",
+           maior_desvio(u, 0.0), maior_desvio(v, 0.0));
 
-    printf("\nDesempenho (mediana de %d execucoes)\n", execucoes);
+    inicia(2.0, -1.0);
+    simular(0, passos);
+    printf("2) campo constante (u=2, v=-1): desvio u = %.1e, desvio v = %.1e\n",
+           maior_desvio(u, 2.0), maior_desvio(v, -1.0));
 
-    double *referencia = aloca(n);
-    double t_seq = medir(&m, passos, execucoes, passo_sequencial, referencia);
+    inicia(1.0, 0.0);
+    u[(n / 2) * n + n / 2] += 1.0;
+    double pico0 = maximo(u), soma0 = soma(u);
+    simular(0, passos);
+    printf("3) perturbacao central: pico %.6f -> %.6f, soma %.4f -> %.4f\n\n",
+           pico0, maximo(u), soma0, soma(u));
 
-    Versao versoes[6] = {
-        { "static",  "nao",         passo_static,           0.0, 0 },
-        { "static",  "collapse(2)", passo_static_collapse,  0.0, 0 },
-        { "dynamic", "nao",         passo_dynamic,          0.0, 0 },
-        { "dynamic", "collapse(2)", passo_dynamic_collapse, 0.0, 0 },
-        { "guided",  "nao",         passo_guided,           0.0, 0 },
-        { "guided",  "collapse(2)", passo_guided_collapse,  0.0, 0 },
-    };
+    const char *nomes[7] = { "sequencial", "static", "static + collapse(2)",
+                             "dynamic", "dynamic + collapse(2)",
+                             "guided", "guided + collapse(2)" };
 
-    double *obtido = aloca(n);
+    printf("Desempenho (menor tempo de %d execucoes)\n", execucoes);
+    printf("versao,tempo_s,speedup,confere\n");
+    double t_seq = medir(0, passos, execucoes);
+    memcpy(referencia, u, n * n * sizeof(double));
+    printf("%s,%.4f,1.00,-\n", nomes[0], t_seq);
 
-    for (int k = 0; k < 6; k++) {
-        versoes[k].segundos = medir(&m, passos, execucoes, versoes[k].funcao, obtido);
-        versoes[k].confere = (memcmp(obtido, referencia,
-                                     (size_t)n * (size_t)n * sizeof(double)) == 0);
+    for (int versao = 1; versao <= 6; versao++) {
+        double t = medir(versao, passos, execucoes);
+        int confere = memcmp(u, referencia, n * n * sizeof(double)) == 0;
+        printf("%s,%.4f,%.2f,%s\n", nomes[versao], t, t_seq / t, confere ? "sim" : "NAO");
     }
 
-    printf("%-10s %-12s %11s %9s %9s\n",
-           "schedule", "collapse", "tempo (s)", "speedup", "confere");
-    printf("%-10s %-12s %11.4f %9.2f %9s\n", "-", "-", t_seq, 1.0, "-");
-    for (int k = 0; k < 6; k++)
-        printf("%-10s %-12s %11.4f %9.2f %9s\n",
-               versoes[k].schedule, versoes[k].collapse, versoes[k].segundos,
-               t_seq / versoes[k].segundos, versoes[k].confere ? "sim" : "NAO");
-
-    free(referencia);
-    free(obtido);
+    free(u); free(v); free(un); free(vn); free(referencia);
     return 0;
 }
