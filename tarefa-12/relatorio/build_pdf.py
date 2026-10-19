@@ -29,6 +29,19 @@ img {
   page-break-inside: avoid;
 }
 
+blockquote {
+  margin: 2mm 0 3.5mm;
+  padding: 1.8mm 3.5mm;
+  border-left: 3px solid #b0342c;
+  background: #faf5ef;
+  font-style: italic;
+  page-break-inside: avoid;
+}
+
+blockquote p {
+  margin: 0;
+}
+
 .legenda {
   font-family: "Segoe UI", sans-serif;
   font-size: 8pt;

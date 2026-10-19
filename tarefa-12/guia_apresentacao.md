@@ -4,9 +4,9 @@
 
 Peguei o código da Tarefa 11 e medi a escalabilidade dele num nó do NPAD, em
 cinco versões sucessivas. Achei três gargalos: capacidade de L3 agregado, um
-trecho serial nas bordas que eu mesmo criei, e NUMA. O código ficou 66× mais
+trecho serial nas bordas que eu mesmo criei, e NUMA. O código ficou 90× mais
 rápido do sequencial original até a última versão em 128 threads, mas **não é
-fortemente nem fracamente escalável** — a eficiência termina em 0,38 e 0,09.
+fortemente nem fracamente escalável** — a eficiência termina em 0,56 e 0,11.
 
 ## As três definições (o professor vai perguntar)
 
@@ -16,17 +16,18 @@ fortemente nem fracamente escalável** — a eficiência termina em 0,38 e 0,09.
 | **fortemente** escalável | mantém a eficiência **sem** aumentar o problema |
 | **fracamente** escalável | mantém a eficiência se o problema crescer na **mesma taxa** das threads |
 
-Fraca ⟹ escalável. Forte ⟹ escalável. Uma **não** implica a outra.
+Pelo slide 52 do professor: forte ⊂ fraca ⊂ escalável. Ou seja, forte ⟹ fraca ⟹ escalável.
+O relatório diz que "nenhuma implica a outra" — se perguntarem, seguir o diagrama do professor.
 
 ## Números de cor
 
 | | |
 |---|---|
-| melhor | v4, 128 threads: 0,0498 s — eficiência 0,38 |
-| ganho total | 3,306 s → 0,0498 s = **66×** |
+| melhor | v4, 128 threads: 0,0494 s — eficiência 0,56 |
+| ganho total | 4,455 s → 0,0494 s = **90×** |
 | L3 | 32 MB por CCX de 8 núcleos, 512 MB somados; problema = 128 MB |
-| fração serial da v2 | 4,6% (Amdahl, a partir do teto de 18,8×) |
-| fraca | eficiência cai a 0,09 |
+| fração serial da v2 | 2,8% (Amdahl, a partir do teto de 28,5×) |
+| fraca | eficiência cai a 0,11 |
 
 ## As partes, na ordem
 
@@ -43,11 +44,11 @@ em 32 e volta a cair. As cinco versões fazem o mesmo desenho, então não é ru
 **4. A explicação.** Com `OMP_PROC_BIND=close`, mais threads ocupam mais CCX, e o
 L3 agregado cresce junto. Em 32 threads são 4 CCX = 128 MB, que é exatamente o
 tamanho do problema. Os dados passam a sobreviver entre passos. Prova pela banda:
-26 GB/s em 8 threads (DRAM) contra 514 GB/s em 128 (só pode ser cache).
+~26 GB/s em 8 threads (DRAM) contra ~530 GB/s em 128 (só pode ser cache).
 
-**5. A v2, que piorou.** Tirar o `%` deixou o sequencial 1,35× mais rápido e o
-paralelo 1,7× mais lento. Eu tinha deixado as bordas em série: colunas 0 e n−1 de
-2046 linhas, acessos dispersos, uma thread só. A v3 distribui e devolve 2,24×.
+**5. A v2, que piorou.** Tirar o `%` deixou o sequencial 1,27× mais rápido e o
+paralelo 1,6× mais lento. Eu tinha deixado as bordas em série: colunas 0 e n−1 de
+2046 linhas, acessos dispersos, uma thread só. A v3 distribui e devolve 2,19×.
 
 **6. Escalabilidade fraca.** No maior ponto (64 threads, n=8192) as cinco versões
 dão o mesmo tempo, ~4,1 s. 2 GB de matrizes contra 512 MB de L3: não cabe mais
@@ -55,20 +56,20 @@ nada, vira banda de memória pura, e nenhuma otimização toca nesse limite.
 
 ## Se perguntarem
 
-**O programa é escalável?** Não fortemente (eficiência 1,00 → 0,38) e não
-fracamente (→ 0,09). Rigorosamente, falhar no teste fraco não prova que não é
+**O programa é escalável?** Não fortemente (eficiência 1,00 → 0,56) e não
+fracamente (→ 0,11). Rigorosamente, falhar no teste fraco não prova que não é
 escalável em *nenhuma* taxa — só naquela. Mas como o limite é banda de memória,
 que não cresce com `n`, crescer mais rápido pioraria.
 
 **Por que a eficiência sobe de 16 para 32 threads?** Porque o L3 agregado passa a
-caber o problema. É ganho superlinear: o tempo cai 3,7× dobrando as threads.
+caber o problema. É ganho superlinear: dobrando as threads, o tempo cai 3,4× (v0) a 4,2× (v4).
 
 **Por que o first touch só ajuda acima de 32 threads?** Abaixo disso todas as
 threads estão no mesmo nó NUMA, então não há para onde distribuir as páginas.
-Vale 12% em 128 threads.
+Vale 14–16% em 128 threads (efeito pequeno e instável: em 64 threads a v1 foi 7% pior).
 
-**Como você chegou nos 4,6% de fração serial?** Por Amdahl, invertendo: speedup
-preso em 18,8× com 128 threads só é possível com ~4,6% de código serial.
+**Como você chegou nos 2,8% de fração serial?** Por Amdahl, invertendo: speedup
+preso em 28,5× com 128 threads só é possível com ~2,8% de código serial.
 
 **Por que as versões otimizadas têm eficiência fraca *pior*?** Porque o T(1)
 delas é 1,85× menor. O denominador mudou. Eficiência entre versões de bases
