@@ -1,48 +1,86 @@
-# Apoio para a defesa — Tarefa 16
+# Guia de apresentação — Tarefa 16
 
-## Sequência para explicar
+## Resumo em 30 segundos
 
-1. **Conta:** cada elemento `y[i]` é a soma dos produtos da linha `i` de `A` pelos elementos de `x`.
-2. **Divisão:** as linhas são independentes. Cada processo recebe `ceil(M/P)` linhas consecutivas; linhas extras valem zero.
-3. **Dados:** `Scatter` reparte `A`; `Bcast` copia `x` inteiro; `Gather` junta `y` na ordem dos processos.
-4. **Tempo:** `MPI_Barrier` alinha o começo; `MPI_Wtime` mede comunicação e cálculo até o fim do `Gather` no processo 0. A inicialização fica fora.
-5. **Resultado:** comparar as medianas de cinco rodadas por tamanho e número de processos. Crescer `P` também aumenta o custo de distribuir `A`.
+y = A·x com MPI. `Scatter` divide A por linhas, `Bcast` manda x inteiro, cada
+processo calcula as suas linhas e `Gather` junta y no processo 0. Medi cada fase: o
+cálculo fica quase P vezes mais rápido, mas **distribuir A custa mais que calcular**,
+então o total quase não melhora. Melhor caso: 2,43× com 16 processos em 8192².
 
-No NPAD: 2048² passou de **0,008543 s** (1 processo) para **0,023500 s**
-(8 processos). Em 8192², 2 processos tiveram **0,120667 s** contra
-**0,131454 s** com 1: ganho de apenas **1,09×**. Não dizer que mais processos
-sempre melhoram o tempo.
+## Números de cor
 
-## Nomes do código
-
-| nome | papel |
+| | |
 |---|---|
-| `mpi.h` | Declara as funções e os tipos do MPI. |
-| `stdio.h` / `stdlib.h` | Impressão; conversão dos argumentos, memória e saída. |
-| `argc`, `argv` | Quantidade de argumentos e textos recebidos na linha de comando. `atoi` converte `M` e `N`. |
-| `processo`, `processos` | Identificação de quem executa e quantidade total (`MPI_Comm_rank` e `MPI_Comm_size`). |
-| `m`, `n` | Linhas e colunas da matriz; `x` tem `n` posições e `y` tem `m` válidas. |
-| `linhas_locais`, `linhas_distribuidas` | Tamanho fixo do bloco de cada processo e total após completar as linhas. |
-| `a`, `x`, `y` | Matriz e vetor de entrada; vetor de saída, reunido no processo 0. |
-| `a_local`, `y_local` | Bloco de linhas recebido e resultados calculados pelo processo atual. |
-| `i`, `j`, `soma` | Linha, coluna e acumulador do produto escalar. |
-| `inicio`, `tempo` | Instante inicial e duração em segundos, obtidos com `MPI_Wtime`. |
+| cálculo com 8 processos | 7,4 a 7,8× mais rápido |
+| distribuir / total | 52% (1 processo) a 97% (2048², 8 processos) |
+| 2048², 1 processo | distribuir 4,17 ms > calcular 3,45 ms |
+| melhor speedup total | 2,43× (8192², 16 processos) |
+| 2048² | nunca ficou mais rápido que 1 processo |
 
-`MPI_Init` inicia o ambiente MPI; `MPI_Finalize` encerra. `MPI_Abort` encerra
-todos se faltar memória. `malloc` reserva memória, `calloc` reserva e zera as
-linhas extras, `free` libera. `printf` mostra o resultado; `fprintf` mostra
-erro. `MPI_DOUBLE` informa o tipo enviado; `MPI_COMM_WORLD` é o grupo de todos
-os processos desta execução.
+## Se perguntarem
 
-## Perguntas prováveis
+**O que é comunicação coletiva?** Comunicação que envolve todos os processos do
+comunicador. Todos chamam a mesma função, na mesma ordem.
 
-- **Por que distribuir por linhas?** Cada linha gera exatamente um elemento de `y`; não precisa somar resultados entre processos.
-- **Por que o vetor vai inteiro?** Todas as linhas precisam de todos os `N` elementos de `x`.
-- **Por que completar com zeros?** `MPI_Scatter` e `MPI_Gather` usam a mesma quantidade por processo. Assim aceitamos qualquer `M` sem mudar a chamada.
-- **O que é `rank`?** Número do processo dentro de `MPI_COMM_WORLD`; o rank 0 organiza entrada e saída.
-- **O que é comunicação coletiva?** Chamada feita por todos os processos do comunicador, como `Scatter`, `Bcast` e `Gather`.
-- **O que é speedup?** `T(1)/T(P)` para o mesmo tamanho de matriz. Acima de 1 significa execução mais rápida que com um processo.
-- **Por que mais processos podem piorar?** Distribuir a matriz custa tempo e todos disputam a memória do mesmo nó.
-- **Qual a diferença entre `malloc` e `calloc` aqui?** `calloc` zera as linhas extras de `A`; `malloc` reserva os outros vetores, que serão preenchidos antes do uso.
+**Diferença entre Scatter e Bcast?** Scatter divide: cada processo recebe uma parte
+diferente. Bcast copia: todos recebem o mesmo dado inteiro.
 
-Se alguma resposta não sair com palavras próprias, volte ao trecho do código correspondente e explique primeiro com um exemplo de `M=5`, `N=3` e `P=2`.
+**Por que dividir por linhas?** Cada linha gera um elemento de y, sem depender das
+outras. E a matriz está guardada linha por linha, então as linhas de cada processo
+estão em sequência na memória: o Scatter só corta o vetor em pedaços iguais.
+
+**Por que x vai inteiro?** Toda linha precisa de todos os elementos de x.
+
+**Por que M tem que ser múltiplo de P?** O Scatter e o Gather mandam a mesma
+quantidade para cada processo.
+
+**Para que o `MPI_Barrier`?** Todos começam a medição juntos.
+
+**Por que mais processos não aceleraram?** Razão computação/comunicação: cada número
+de A é usado numa conta só (multiplica e soma), mas precisa ser enviado (8 bytes).
+Mandar custa mais que calcular. E quem manda é só o processo 0, então essa parte não
+diminui: funciona como a parte serial da lei de Amdahl.
+
+**Como você sabe que é a distribuição?** Medi cada fase com `MPI_Wtime`. O cálculo
+cai quase P vezes; a distribuição fica entre 52% e 97% do tempo.
+
+**Por que com 16 processos melhorou?** Não medi. Hipótese: o Open MPI troca o
+algoritmo do Scatter por uma árvore, em que vários processos repassam partes ao mesmo
+tempo.
+
+**Por que o cálculo parou de cair de 8 para 16 em 8192²?** Provavelmente os 16
+processos ficaram na mesma região de memória e dividiram a mesma banda, como na
+Tarefa 12. Não verifiquei.
+
+**Como melhoraria?** Cada processo gerar ou ler as suas próprias linhas. Aí só x
+precisaria ser enviado.
+
+**Por que o Gather é barato?** Ele move só M números (y), contra M × N do Scatter.
+
+## Detalhes do código
+
+**Por que quatro `MPI_Wtime` (t0 a t3)?** Para medir cada fase: t1 − t0 é distribuir,
+t2 − t1 é calcular, t3 − t2 é juntar.
+
+**`atoi(argv[1]) % processos != 0`?** Confere se M é múltiplo do número de processos.
+Se não for, o programa avisa e sai.
+
+**Por que `a` e `y` só existem no processo 0?** Só ele guarda a matriz inteira e o
+resultado inteiro. Os outros têm só `a_local` e `y_local`. Nos outros processos `a`
+fica `NULL`, e `free(NULL)` não faz nada.
+
+**`--cpu-bind=cores` no script?** Prende cada processo num núcleo.
+
+**`export OMPI_MCA_btl=^openib`?** Desliga um componente antigo do Open MPI que só
+gerava aviso.
+
+## Comandos
+
+```bash
+ssh npad
+cd ~/paralela/tarefa-16
+sbatch job_npad.sh
+
+cd tarefa-16/relatorio
+python graficos.py && python build_pdf.py
+```

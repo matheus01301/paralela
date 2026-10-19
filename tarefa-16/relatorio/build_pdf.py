@@ -16,11 +16,40 @@ def main() -> int:
         "disciplina": "Programação Paralela",
         "aluno": "Matheus Marinho",
         "tarefa": "Tarefa 16",
-        "data": "29 de setembro de 2026",
+        "data": "18 de outubro de 2026",
     }
     globais["PASTA_RELATORIO"] = PASTA_RELATORIO
     globais["PASTA_TAREFA"] = PASTA_RELATORIO.parent
-    globais["CSS"] += "pre { font-size: 6.6pt; line-height: 1.20; }"
+    globais["CSS"] += """
+img {
+  display: block;
+  width: 100%;
+  margin: 2.5mm auto 0;
+  page-break-inside: avoid;
+}
+
+.legenda {
+  font-family: "Segoe UI", sans-serif;
+  font-size: 8pt;
+  color: #666;
+  text-align: center;
+  margin: 1mm 0 3.5mm;
+  page-break-before: avoid;
+}
+
+blockquote {
+  margin: 2mm 0 3.5mm;
+  padding: 1.8mm 3.5mm;
+  border-left: 3px solid #b0342c;
+  background: #faf5ef;
+  font-style: italic;
+  page-break-inside: avoid;
+}
+
+blockquote p {
+  margin: 0;
+}
+"""
     return modulo["main"]()
 
 
