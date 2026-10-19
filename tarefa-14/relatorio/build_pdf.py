@@ -1,0 +1,57 @@
+#!/usr/bin/env python3
+"""Gera o PDF da Tarefa 14 usando o gerador dos relatorios anteriores."""
+
+import runpy
+from pathlib import Path
+
+
+PASTA_RELATORIO = Path(__file__).resolve().parent
+GERADOR_BASE = PASTA_RELATORIO.parent.parent / "tarefa-2" / "relatorio" / "build_pdf.py"
+
+
+def main() -> int:
+    modulo = runpy.run_path(str(GERADOR_BASE), run_name="gerador_relatorio_base")
+    globais = modulo["main"].__globals__
+    globais["IDENTIFICACAO"] = {
+        "disciplina": "Programação Paralela",
+        "aluno": "Matheus Marinho",
+        "tarefa": "Tarefa 14",
+        "data": "18 de outubro de 2026",
+    }
+    globais["PASTA_RELATORIO"] = PASTA_RELATORIO
+    globais["PASTA_TAREFA"] = PASTA_RELATORIO.parent
+    globais["CSS"] += """
+img {
+  display: block;
+  width: 100%;
+  margin: 2.5mm auto 0;
+  page-break-inside: avoid;
+}
+
+.legenda {
+  font-family: "Segoe UI", sans-serif;
+  font-size: 8pt;
+  color: #666;
+  text-align: center;
+  margin: 1mm 0 3.5mm;
+  page-break-before: avoid;
+}
+
+blockquote {
+  margin: 2mm 0 3.5mm;
+  padding: 1.8mm 3.5mm;
+  border-left: 3px solid #b0342c;
+  background: #faf5ef;
+  font-style: italic;
+  page-break-inside: avoid;
+}
+
+blockquote p {
+  margin: 0;
+}
+"""
+    return modulo["main"]()
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
